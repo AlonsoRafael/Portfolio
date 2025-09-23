@@ -1,0 +1,34 @@
+id,nome,destaque,descricao,imagem
+1,HTML,false,Linguagem de marcação para estruturação de páginas web.,https://github.com/AlonsoRafael/assets/raw/main/imagem/html.svg
+2,CSS,false,Linguagem de estilos para definição do design e layout das páginas web.,https://github.com/AlonsoRafael/assets/raw/main/imagem/css.svg
+3,JavaScript,false,Linguagem de programação para interatividade em páginas web.,https://github.com/AlonsoRafael/assets/raw/main/imagem/javascript.svg
+4,TypeScript,true,Superset do JavaScript que adiciona tipagem estática.,https://github.com/AlonsoRafael/assets/raw/main/imagem/typescript.svg
+5,Node.js,true,Ambiente de execução JavaScript no lado do servidor.,https://github.com/AlonsoRafael/assets/raw/main/imagem/node.svg
+6,Java,true,Linguagem de programação orientada a objetos.,https://github.com/AlonsoRafael/assets/raw/main/imagem/java.svg
+7,Python,true,Linguagem de programação interpretada de alto nível.,https://github.com/AlonsoRafael/assets/raw/main/imagem/python.svg
+8,NestJS,true,Framework para construção de aplicações back-end em Node.js.,https://github.com/AlonsoRafael/assets/raw/main/imagem/nest.svg
+9,Express.js,false,Framework web minimalista para Node.js.,https://github.com/AlonsoRafael/assets/raw/main/imagem/express.svg
+10,React,true,Biblioteca JavaScript para construção de interfaces de usuário.,https://github.com/AlonsoRafael/assets/raw/main/imagem/react.svg
+11,Vue.js,false,Framework progressivo para construção de interfaces de usuário.,https://github.com/AlonsoRafael/assets/raw/main/imagem/vue.svg
+12,Angular,false,Framework front-end desenvolvido pelo Google.,https://github.com/AlonsoRafael/assets/raw/main/imagem/angular.svg
+13,Svelte,false,Framework para construção de interfaces reativas.,https://github.com/AlonsoRafael/assets/raw/main/imagem/svelte.svg
+14,PostgreSQL,false,Sistema de gerenciamento de banco de dados relacional avançado.,https://github.com/AlonsoRafael/assets/raw/main/imagem/postgresql.svg
+15,MongoDB,false,Banco de dados NoSQL orientado a documentos.,https://github.com/AlonsoRafael/assets/raw/main/imagem/mongo.svg
+16,GraphQL,false,Linguagem de consulta para APIs que permite obter apenas os dados necessários.,https://github.com/AlonsoRafael/assets/raw/main/imagem/graphql.svg
+17,Docker,false,"Plataforma para criação, execução e gerenciamento de containers.",https://github.com/AlonsoRafael/assets/raw/main/imagem/docker.svg
+18,Kubernetes,false,"Sistema para automação da implantação, escalonamento e operações de containers.",https://github.com/AlonsoRafael/assets/raw/main/imagem/kubernetes.svg
+19,Terraform,false,Ferramenta de infraestrutura como código para gerenciamento de recursos na nuvem.,https://github.com/AlonsoRafael/assets/raw/main/imagem/terraform.svg
+20,Firebase,false,Plataforma de desenvolvimento de aplicativos móveis e web da Google.,https://github.com/AlonsoRafael/assets/raw/main/imagem/firebase.svg
+21,React Native,false,Biblioteca para desenvolvimento de aplicativos móveis com React.,https://github.com/AlonsoRafael/assets/raw/main/imagem/react.svg
+22,Next.js,false,Framework React para construção de aplicações web.,https://github.com/AlonsoRafael/assets/raw/main/imagem/next.svg
+23,Prisma,false,ORM para Node.js e TypeScript com suporte a diversos bancos de dados.,https://github.com/AlonsoRafael/assets/raw/main/imagem/prisma.svg
+24,Supabase,false,Plataforma open-source para desenvolvimento de aplicativos web e APIs.,https://github.com/AlonsoRafael/assets/raw/main/imagem/supabase.svg
+25,Tailwind CSS,false,Framework CSS para construção de interfaces de usuário.,https://github.com/AlonsoRafael/assets/raw/main/imagem/tailwind.svg
+26,Flutter,true,Framework para desenvolvimento de aplicativos móveis nativos.,https://github.com/AlonsoRafael/assets/raw/main/imagem/flutter.svg
+27,PHP,false,Linguagem de programação de uso geral.,https://github.com/AlonsoRafael/assets/raw/main/imagem/php.svg
+28,ChatGPT,false,API de conversação baseada em GPT-3.,https://github.com/AlonsoRafael/assets/raw/main/imagem/openai.svg
+29,Dart,false,Linguagem de programação para desenvolvimento de aplicativos móveis com Flutter.,https://github.com/AlonsoRafael/assets/raw/main/imagem/dart.svg
+30,R,false,Linguagem de programação voltada para estatística e análise de dados.,https://github.com/AlonsoRafael/assets/raw/main/imagem/r.svg
+31,C,false,Linguagem de programação de baixo nível amplamente usada em sistemas operacionais e embarcados.,https://github.com/AlonsoRafael/assets/raw/main/imagem/c.svg
+32,C++,false,Linguagem de programação orientada a objetos e de alto desempenho.,https://github.com/AlonsoRafael/assets/raw/main/imagem/cplusplus.svg
+33,R,false,Sistema operacional de código aberto baseado no núcleo Linux.,https://github.com/AlonsoRafael/assets/raw/main/imagem/linux.svg
