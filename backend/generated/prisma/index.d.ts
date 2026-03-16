@@ -18,6 +18,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  * 
  */
 export type Tecnologia = $Result.DefaultSelection<Prisma.$TecnologiaPayload>
+/**
+ * Model Projeto
+ * 
+ */
+export type Projeto = $Result.DefaultSelection<Prisma.$ProjetoPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -146,6 +151,16 @@ export class PrismaClient<
     * ```
     */
   get tecnologia(): Prisma.TecnologiaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.projeto`: Exposes CRUD operations for the **Projeto** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Projetos
+    * const projetos = await prisma.projeto.findMany()
+    * ```
+    */
+  get projeto(): Prisma.ProjetoDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -204,8 +219,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.16.2
-   * Query Engine version: 1c57fdcd7e44b29b9313256c76699e91c3ac3c43
+   * Prisma Client JS version: 6.19.2
+   * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
    */
   export type PrismaVersion = {
     client: string
@@ -218,6 +233,7 @@ export namespace Prisma {
    */
 
 
+  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -586,7 +602,8 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    Tecnologia: 'Tecnologia'
+    Tecnologia: 'Tecnologia',
+    Projeto: 'Projeto'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -605,7 +622,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "tecnologia"
+      modelProps: "tecnologia" | "projeto"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -680,6 +697,80 @@ export namespace Prisma {
           count: {
             args: Prisma.TecnologiaCountArgs<ExtArgs>
             result: $Utils.Optional<TecnologiaCountAggregateOutputType> | number
+          }
+        }
+      }
+      Projeto: {
+        payload: Prisma.$ProjetoPayload<ExtArgs>
+        fields: Prisma.ProjetoFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProjetoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjetoPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProjetoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjetoPayload>
+          }
+          findFirst: {
+            args: Prisma.ProjetoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjetoPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProjetoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjetoPayload>
+          }
+          findMany: {
+            args: Prisma.ProjetoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjetoPayload>[]
+          }
+          create: {
+            args: Prisma.ProjetoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjetoPayload>
+          }
+          createMany: {
+            args: Prisma.ProjetoCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProjetoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjetoPayload>[]
+          }
+          delete: {
+            args: Prisma.ProjetoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjetoPayload>
+          }
+          update: {
+            args: Prisma.ProjetoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjetoPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProjetoDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProjetoUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProjetoUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjetoPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProjetoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjetoPayload>
+          }
+          aggregate: {
+            args: Prisma.ProjetoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProjeto>
+          }
+          groupBy: {
+            args: Prisma.ProjetoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProjetoGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProjetoCountArgs<ExtArgs>
+            result: $Utils.Optional<ProjetoCountAggregateOutputType> | number
           }
         }
       }
@@ -780,6 +871,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     tecnologia?: TecnologiaOmit
+    projeto?: ProjetoOmit
   }
 
   /* Types for Logging */
@@ -854,6 +946,67 @@ export namespace Prisma {
    * Count Types
    */
 
+
+  /**
+   * Count Type TecnologiaCountOutputType
+   */
+
+  export type TecnologiaCountOutputType = {
+    projetos: number
+  }
+
+  export type TecnologiaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    projetos?: boolean | TecnologiaCountOutputTypeCountProjetosArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TecnologiaCountOutputType without action
+   */
+  export type TecnologiaCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TecnologiaCountOutputType
+     */
+    select?: TecnologiaCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TecnologiaCountOutputType without action
+   */
+  export type TecnologiaCountOutputTypeCountProjetosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjetoWhereInput
+  }
+
+
+  /**
+   * Count Type ProjetoCountOutputType
+   */
+
+  export type ProjetoCountOutputType = {
+    tecnologias: number
+  }
+
+  export type ProjetoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tecnologias?: boolean | ProjetoCountOutputTypeCountTecnologiasArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProjetoCountOutputType without action
+   */
+  export type ProjetoCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjetoCountOutputType
+     */
+    select?: ProjetoCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProjetoCountOutputType without action
+   */
+  export type ProjetoCountOutputTypeCountTecnologiasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TecnologiaWhereInput
+  }
 
 
   /**
@@ -1058,6 +1211,8 @@ export namespace Prisma {
     descricao?: boolean
     imagem?: boolean
     destaque?: boolean
+    projetos?: boolean | Tecnologia$projetosArgs<ExtArgs>
+    _count?: boolean | TecnologiaCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tecnologia"]>
 
   export type TecnologiaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1085,10 +1240,18 @@ export namespace Prisma {
   }
 
   export type TecnologiaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "descricao" | "imagem" | "destaque", ExtArgs["result"]["tecnologia"]>
+  export type TecnologiaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    projetos?: boolean | Tecnologia$projetosArgs<ExtArgs>
+    _count?: boolean | TecnologiaCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TecnologiaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type TecnologiaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $TecnologiaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Tecnologia"
-    objects: {}
+    objects: {
+      projetos: Prisma.$ProjetoPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       nome: string
@@ -1489,6 +1652,7 @@ export namespace Prisma {
    */
   export interface Prisma__TecnologiaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    projetos<T extends Tecnologia$projetosArgs<ExtArgs> = {}>(args?: Subset<T, Tecnologia$projetosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjetoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1540,6 +1704,10 @@ export namespace Prisma {
      */
     omit?: TecnologiaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TecnologiaInclude<ExtArgs> | null
+    /**
      * Filter, which Tecnologia to fetch.
      */
     where: TecnologiaWhereUniqueInput
@@ -1558,6 +1726,10 @@ export namespace Prisma {
      */
     omit?: TecnologiaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TecnologiaInclude<ExtArgs> | null
+    /**
      * Filter, which Tecnologia to fetch.
      */
     where: TecnologiaWhereUniqueInput
@@ -1575,6 +1747,10 @@ export namespace Prisma {
      * Omit specific fields from the Tecnologia
      */
     omit?: TecnologiaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TecnologiaInclude<ExtArgs> | null
     /**
      * Filter, which Tecnologia to fetch.
      */
@@ -1624,6 +1800,10 @@ export namespace Prisma {
      */
     omit?: TecnologiaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TecnologiaInclude<ExtArgs> | null
+    /**
      * Filter, which Tecnologia to fetch.
      */
     where?: TecnologiaWhereInput
@@ -1672,6 +1852,10 @@ export namespace Prisma {
      */
     omit?: TecnologiaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TecnologiaInclude<ExtArgs> | null
+    /**
      * Filter, which Tecnologias to fetch.
      */
     where?: TecnologiaWhereInput
@@ -1714,6 +1898,10 @@ export namespace Prisma {
      * Omit specific fields from the Tecnologia
      */
     omit?: TecnologiaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TecnologiaInclude<ExtArgs> | null
     /**
      * The data needed to create a Tecnologia.
      */
@@ -1762,6 +1950,10 @@ export namespace Prisma {
      * Omit specific fields from the Tecnologia
      */
     omit?: TecnologiaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TecnologiaInclude<ExtArgs> | null
     /**
      * The data needed to update a Tecnologia.
      */
@@ -1829,6 +2021,10 @@ export namespace Prisma {
      */
     omit?: TecnologiaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TecnologiaInclude<ExtArgs> | null
+    /**
      * The filter to search for the Tecnologia to update in case it exists.
      */
     where: TecnologiaWhereUniqueInput
@@ -1855,6 +2051,10 @@ export namespace Prisma {
      */
     omit?: TecnologiaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TecnologiaInclude<ExtArgs> | null
+    /**
      * Filter which Tecnologia to delete.
      */
     where: TecnologiaWhereUniqueInput
@@ -1875,6 +2075,30 @@ export namespace Prisma {
   }
 
   /**
+   * Tecnologia.projetos
+   */
+  export type Tecnologia$projetosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Projeto
+     */
+    select?: ProjetoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Projeto
+     */
+    omit?: ProjetoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjetoInclude<ExtArgs> | null
+    where?: ProjetoWhereInput
+    orderBy?: ProjetoOrderByWithRelationInput | ProjetoOrderByWithRelationInput[]
+    cursor?: ProjetoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProjetoScalarFieldEnum | ProjetoScalarFieldEnum[]
+  }
+
+  /**
    * Tecnologia without action
    */
   export type TecnologiaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1886,6 +2110,1153 @@ export namespace Prisma {
      * Omit specific fields from the Tecnologia
      */
     omit?: TecnologiaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TecnologiaInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Projeto
+   */
+
+  export type AggregateProjeto = {
+    _count: ProjetoCountAggregateOutputType | null
+    _avg: ProjetoAvgAggregateOutputType | null
+    _sum: ProjetoSumAggregateOutputType | null
+    _min: ProjetoMinAggregateOutputType | null
+    _max: ProjetoMaxAggregateOutputType | null
+  }
+
+  export type ProjetoAvgAggregateOutputType = {
+    id: number | null
+    nivel: number | null
+  }
+
+  export type ProjetoSumAggregateOutputType = {
+    id: number | null
+    nivel: number | null
+  }
+
+  export type ProjetoMinAggregateOutputType = {
+    id: number | null
+    nome: string | null
+    descricao: string | null
+    nivel: number | null
+    tipo: string | null
+    destaque: boolean | null
+    repositorio: string | null
+  }
+
+  export type ProjetoMaxAggregateOutputType = {
+    id: number | null
+    nome: string | null
+    descricao: string | null
+    nivel: number | null
+    tipo: string | null
+    destaque: boolean | null
+    repositorio: string | null
+  }
+
+  export type ProjetoCountAggregateOutputType = {
+    id: number
+    nome: number
+    descricao: number
+    imagem: number
+    nivel: number
+    tipo: number
+    destaque: number
+    repositorio: number
+    _all: number
+  }
+
+
+  export type ProjetoAvgAggregateInputType = {
+    id?: true
+    nivel?: true
+  }
+
+  export type ProjetoSumAggregateInputType = {
+    id?: true
+    nivel?: true
+  }
+
+  export type ProjetoMinAggregateInputType = {
+    id?: true
+    nome?: true
+    descricao?: true
+    nivel?: true
+    tipo?: true
+    destaque?: true
+    repositorio?: true
+  }
+
+  export type ProjetoMaxAggregateInputType = {
+    id?: true
+    nome?: true
+    descricao?: true
+    nivel?: true
+    tipo?: true
+    destaque?: true
+    repositorio?: true
+  }
+
+  export type ProjetoCountAggregateInputType = {
+    id?: true
+    nome?: true
+    descricao?: true
+    imagem?: true
+    nivel?: true
+    tipo?: true
+    destaque?: true
+    repositorio?: true
+    _all?: true
+  }
+
+  export type ProjetoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Projeto to aggregate.
+     */
+    where?: ProjetoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Projetos to fetch.
+     */
+    orderBy?: ProjetoOrderByWithRelationInput | ProjetoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProjetoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Projetos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Projetos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Projetos
+    **/
+    _count?: true | ProjetoCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProjetoAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProjetoSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProjetoMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProjetoMaxAggregateInputType
+  }
+
+  export type GetProjetoAggregateType<T extends ProjetoAggregateArgs> = {
+        [P in keyof T & keyof AggregateProjeto]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProjeto[P]>
+      : GetScalarType<T[P], AggregateProjeto[P]>
+  }
+
+
+
+
+  export type ProjetoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjetoWhereInput
+    orderBy?: ProjetoOrderByWithAggregationInput | ProjetoOrderByWithAggregationInput[]
+    by: ProjetoScalarFieldEnum[] | ProjetoScalarFieldEnum
+    having?: ProjetoScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProjetoCountAggregateInputType | true
+    _avg?: ProjetoAvgAggregateInputType
+    _sum?: ProjetoSumAggregateInputType
+    _min?: ProjetoMinAggregateInputType
+    _max?: ProjetoMaxAggregateInputType
+  }
+
+  export type ProjetoGroupByOutputType = {
+    id: number
+    nome: string
+    descricao: string
+    imagem: string[]
+    nivel: number
+    tipo: string
+    destaque: boolean
+    repositorio: string
+    _count: ProjetoCountAggregateOutputType | null
+    _avg: ProjetoAvgAggregateOutputType | null
+    _sum: ProjetoSumAggregateOutputType | null
+    _min: ProjetoMinAggregateOutputType | null
+    _max: ProjetoMaxAggregateOutputType | null
+  }
+
+  type GetProjetoGroupByPayload<T extends ProjetoGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProjetoGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProjetoGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProjetoGroupByOutputType[P]>
+            : GetScalarType<T[P], ProjetoGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProjetoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    descricao?: boolean
+    imagem?: boolean
+    nivel?: boolean
+    tipo?: boolean
+    destaque?: boolean
+    repositorio?: boolean
+    tecnologias?: boolean | Projeto$tecnologiasArgs<ExtArgs>
+    _count?: boolean | ProjetoCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projeto"]>
+
+  export type ProjetoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    descricao?: boolean
+    imagem?: boolean
+    nivel?: boolean
+    tipo?: boolean
+    destaque?: boolean
+    repositorio?: boolean
+  }, ExtArgs["result"]["projeto"]>
+
+  export type ProjetoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    descricao?: boolean
+    imagem?: boolean
+    nivel?: boolean
+    tipo?: boolean
+    destaque?: boolean
+    repositorio?: boolean
+  }, ExtArgs["result"]["projeto"]>
+
+  export type ProjetoSelectScalar = {
+    id?: boolean
+    nome?: boolean
+    descricao?: boolean
+    imagem?: boolean
+    nivel?: boolean
+    tipo?: boolean
+    destaque?: boolean
+    repositorio?: boolean
+  }
+
+  export type ProjetoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "descricao" | "imagem" | "nivel" | "tipo" | "destaque" | "repositorio", ExtArgs["result"]["projeto"]>
+  export type ProjetoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tecnologias?: boolean | Projeto$tecnologiasArgs<ExtArgs>
+    _count?: boolean | ProjetoCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProjetoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ProjetoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ProjetoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Projeto"
+    objects: {
+      tecnologias: Prisma.$TecnologiaPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      nome: string
+      descricao: string
+      imagem: string[]
+      nivel: number
+      tipo: string
+      destaque: boolean
+      repositorio: string
+    }, ExtArgs["result"]["projeto"]>
+    composites: {}
+  }
+
+  type ProjetoGetPayload<S extends boolean | null | undefined | ProjetoDefaultArgs> = $Result.GetResult<Prisma.$ProjetoPayload, S>
+
+  type ProjetoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProjetoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProjetoCountAggregateInputType | true
+    }
+
+  export interface ProjetoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Projeto'], meta: { name: 'Projeto' } }
+    /**
+     * Find zero or one Projeto that matches the filter.
+     * @param {ProjetoFindUniqueArgs} args - Arguments to find a Projeto
+     * @example
+     * // Get one Projeto
+     * const projeto = await prisma.projeto.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProjetoFindUniqueArgs>(args: SelectSubset<T, ProjetoFindUniqueArgs<ExtArgs>>): Prisma__ProjetoClient<$Result.GetResult<Prisma.$ProjetoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Projeto that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProjetoFindUniqueOrThrowArgs} args - Arguments to find a Projeto
+     * @example
+     * // Get one Projeto
+     * const projeto = await prisma.projeto.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProjetoFindUniqueOrThrowArgs>(args: SelectSubset<T, ProjetoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProjetoClient<$Result.GetResult<Prisma.$ProjetoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Projeto that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjetoFindFirstArgs} args - Arguments to find a Projeto
+     * @example
+     * // Get one Projeto
+     * const projeto = await prisma.projeto.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProjetoFindFirstArgs>(args?: SelectSubset<T, ProjetoFindFirstArgs<ExtArgs>>): Prisma__ProjetoClient<$Result.GetResult<Prisma.$ProjetoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Projeto that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjetoFindFirstOrThrowArgs} args - Arguments to find a Projeto
+     * @example
+     * // Get one Projeto
+     * const projeto = await prisma.projeto.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProjetoFindFirstOrThrowArgs>(args?: SelectSubset<T, ProjetoFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProjetoClient<$Result.GetResult<Prisma.$ProjetoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Projetos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjetoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Projetos
+     * const projetos = await prisma.projeto.findMany()
+     * 
+     * // Get first 10 Projetos
+     * const projetos = await prisma.projeto.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const projetoWithIdOnly = await prisma.projeto.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProjetoFindManyArgs>(args?: SelectSubset<T, ProjetoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjetoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Projeto.
+     * @param {ProjetoCreateArgs} args - Arguments to create a Projeto.
+     * @example
+     * // Create one Projeto
+     * const Projeto = await prisma.projeto.create({
+     *   data: {
+     *     // ... data to create a Projeto
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProjetoCreateArgs>(args: SelectSubset<T, ProjetoCreateArgs<ExtArgs>>): Prisma__ProjetoClient<$Result.GetResult<Prisma.$ProjetoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Projetos.
+     * @param {ProjetoCreateManyArgs} args - Arguments to create many Projetos.
+     * @example
+     * // Create many Projetos
+     * const projeto = await prisma.projeto.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProjetoCreateManyArgs>(args?: SelectSubset<T, ProjetoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Projetos and returns the data saved in the database.
+     * @param {ProjetoCreateManyAndReturnArgs} args - Arguments to create many Projetos.
+     * @example
+     * // Create many Projetos
+     * const projeto = await prisma.projeto.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Projetos and only return the `id`
+     * const projetoWithIdOnly = await prisma.projeto.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProjetoCreateManyAndReturnArgs>(args?: SelectSubset<T, ProjetoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjetoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Projeto.
+     * @param {ProjetoDeleteArgs} args - Arguments to delete one Projeto.
+     * @example
+     * // Delete one Projeto
+     * const Projeto = await prisma.projeto.delete({
+     *   where: {
+     *     // ... filter to delete one Projeto
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProjetoDeleteArgs>(args: SelectSubset<T, ProjetoDeleteArgs<ExtArgs>>): Prisma__ProjetoClient<$Result.GetResult<Prisma.$ProjetoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Projeto.
+     * @param {ProjetoUpdateArgs} args - Arguments to update one Projeto.
+     * @example
+     * // Update one Projeto
+     * const projeto = await prisma.projeto.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProjetoUpdateArgs>(args: SelectSubset<T, ProjetoUpdateArgs<ExtArgs>>): Prisma__ProjetoClient<$Result.GetResult<Prisma.$ProjetoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Projetos.
+     * @param {ProjetoDeleteManyArgs} args - Arguments to filter Projetos to delete.
+     * @example
+     * // Delete a few Projetos
+     * const { count } = await prisma.projeto.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProjetoDeleteManyArgs>(args?: SelectSubset<T, ProjetoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Projetos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjetoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Projetos
+     * const projeto = await prisma.projeto.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProjetoUpdateManyArgs>(args: SelectSubset<T, ProjetoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Projetos and returns the data updated in the database.
+     * @param {ProjetoUpdateManyAndReturnArgs} args - Arguments to update many Projetos.
+     * @example
+     * // Update many Projetos
+     * const projeto = await prisma.projeto.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Projetos and only return the `id`
+     * const projetoWithIdOnly = await prisma.projeto.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProjetoUpdateManyAndReturnArgs>(args: SelectSubset<T, ProjetoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjetoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Projeto.
+     * @param {ProjetoUpsertArgs} args - Arguments to update or create a Projeto.
+     * @example
+     * // Update or create a Projeto
+     * const projeto = await prisma.projeto.upsert({
+     *   create: {
+     *     // ... data to create a Projeto
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Projeto we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProjetoUpsertArgs>(args: SelectSubset<T, ProjetoUpsertArgs<ExtArgs>>): Prisma__ProjetoClient<$Result.GetResult<Prisma.$ProjetoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Projetos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjetoCountArgs} args - Arguments to filter Projetos to count.
+     * @example
+     * // Count the number of Projetos
+     * const count = await prisma.projeto.count({
+     *   where: {
+     *     // ... the filter for the Projetos we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProjetoCountArgs>(
+      args?: Subset<T, ProjetoCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProjetoCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Projeto.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjetoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProjetoAggregateArgs>(args: Subset<T, ProjetoAggregateArgs>): Prisma.PrismaPromise<GetProjetoAggregateType<T>>
+
+    /**
+     * Group by Projeto.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjetoGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProjetoGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProjetoGroupByArgs['orderBy'] }
+        : { orderBy?: ProjetoGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProjetoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProjetoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Projeto model
+   */
+  readonly fields: ProjetoFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Projeto.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProjetoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tecnologias<T extends Projeto$tecnologiasArgs<ExtArgs> = {}>(args?: Subset<T, Projeto$tecnologiasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TecnologiaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Projeto model
+   */
+  interface ProjetoFieldRefs {
+    readonly id: FieldRef<"Projeto", 'Int'>
+    readonly nome: FieldRef<"Projeto", 'String'>
+    readonly descricao: FieldRef<"Projeto", 'String'>
+    readonly imagem: FieldRef<"Projeto", 'String[]'>
+    readonly nivel: FieldRef<"Projeto", 'Int'>
+    readonly tipo: FieldRef<"Projeto", 'String'>
+    readonly destaque: FieldRef<"Projeto", 'Boolean'>
+    readonly repositorio: FieldRef<"Projeto", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Projeto findUnique
+   */
+  export type ProjetoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Projeto
+     */
+    select?: ProjetoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Projeto
+     */
+    omit?: ProjetoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjetoInclude<ExtArgs> | null
+    /**
+     * Filter, which Projeto to fetch.
+     */
+    where: ProjetoWhereUniqueInput
+  }
+
+  /**
+   * Projeto findUniqueOrThrow
+   */
+  export type ProjetoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Projeto
+     */
+    select?: ProjetoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Projeto
+     */
+    omit?: ProjetoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjetoInclude<ExtArgs> | null
+    /**
+     * Filter, which Projeto to fetch.
+     */
+    where: ProjetoWhereUniqueInput
+  }
+
+  /**
+   * Projeto findFirst
+   */
+  export type ProjetoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Projeto
+     */
+    select?: ProjetoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Projeto
+     */
+    omit?: ProjetoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjetoInclude<ExtArgs> | null
+    /**
+     * Filter, which Projeto to fetch.
+     */
+    where?: ProjetoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Projetos to fetch.
+     */
+    orderBy?: ProjetoOrderByWithRelationInput | ProjetoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Projetos.
+     */
+    cursor?: ProjetoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Projetos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Projetos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Projetos.
+     */
+    distinct?: ProjetoScalarFieldEnum | ProjetoScalarFieldEnum[]
+  }
+
+  /**
+   * Projeto findFirstOrThrow
+   */
+  export type ProjetoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Projeto
+     */
+    select?: ProjetoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Projeto
+     */
+    omit?: ProjetoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjetoInclude<ExtArgs> | null
+    /**
+     * Filter, which Projeto to fetch.
+     */
+    where?: ProjetoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Projetos to fetch.
+     */
+    orderBy?: ProjetoOrderByWithRelationInput | ProjetoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Projetos.
+     */
+    cursor?: ProjetoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Projetos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Projetos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Projetos.
+     */
+    distinct?: ProjetoScalarFieldEnum | ProjetoScalarFieldEnum[]
+  }
+
+  /**
+   * Projeto findMany
+   */
+  export type ProjetoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Projeto
+     */
+    select?: ProjetoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Projeto
+     */
+    omit?: ProjetoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjetoInclude<ExtArgs> | null
+    /**
+     * Filter, which Projetos to fetch.
+     */
+    where?: ProjetoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Projetos to fetch.
+     */
+    orderBy?: ProjetoOrderByWithRelationInput | ProjetoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Projetos.
+     */
+    cursor?: ProjetoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Projetos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Projetos.
+     */
+    skip?: number
+    distinct?: ProjetoScalarFieldEnum | ProjetoScalarFieldEnum[]
+  }
+
+  /**
+   * Projeto create
+   */
+  export type ProjetoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Projeto
+     */
+    select?: ProjetoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Projeto
+     */
+    omit?: ProjetoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjetoInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Projeto.
+     */
+    data: XOR<ProjetoCreateInput, ProjetoUncheckedCreateInput>
+  }
+
+  /**
+   * Projeto createMany
+   */
+  export type ProjetoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Projetos.
+     */
+    data: ProjetoCreateManyInput | ProjetoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Projeto createManyAndReturn
+   */
+  export type ProjetoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Projeto
+     */
+    select?: ProjetoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Projeto
+     */
+    omit?: ProjetoOmit<ExtArgs> | null
+    /**
+     * The data used to create many Projetos.
+     */
+    data: ProjetoCreateManyInput | ProjetoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Projeto update
+   */
+  export type ProjetoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Projeto
+     */
+    select?: ProjetoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Projeto
+     */
+    omit?: ProjetoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjetoInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Projeto.
+     */
+    data: XOR<ProjetoUpdateInput, ProjetoUncheckedUpdateInput>
+    /**
+     * Choose, which Projeto to update.
+     */
+    where: ProjetoWhereUniqueInput
+  }
+
+  /**
+   * Projeto updateMany
+   */
+  export type ProjetoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Projetos.
+     */
+    data: XOR<ProjetoUpdateManyMutationInput, ProjetoUncheckedUpdateManyInput>
+    /**
+     * Filter which Projetos to update
+     */
+    where?: ProjetoWhereInput
+    /**
+     * Limit how many Projetos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Projeto updateManyAndReturn
+   */
+  export type ProjetoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Projeto
+     */
+    select?: ProjetoSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Projeto
+     */
+    omit?: ProjetoOmit<ExtArgs> | null
+    /**
+     * The data used to update Projetos.
+     */
+    data: XOR<ProjetoUpdateManyMutationInput, ProjetoUncheckedUpdateManyInput>
+    /**
+     * Filter which Projetos to update
+     */
+    where?: ProjetoWhereInput
+    /**
+     * Limit how many Projetos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Projeto upsert
+   */
+  export type ProjetoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Projeto
+     */
+    select?: ProjetoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Projeto
+     */
+    omit?: ProjetoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjetoInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Projeto to update in case it exists.
+     */
+    where: ProjetoWhereUniqueInput
+    /**
+     * In case the Projeto found by the `where` argument doesn't exist, create a new Projeto with this data.
+     */
+    create: XOR<ProjetoCreateInput, ProjetoUncheckedCreateInput>
+    /**
+     * In case the Projeto was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProjetoUpdateInput, ProjetoUncheckedUpdateInput>
+  }
+
+  /**
+   * Projeto delete
+   */
+  export type ProjetoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Projeto
+     */
+    select?: ProjetoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Projeto
+     */
+    omit?: ProjetoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjetoInclude<ExtArgs> | null
+    /**
+     * Filter which Projeto to delete.
+     */
+    where: ProjetoWhereUniqueInput
+  }
+
+  /**
+   * Projeto deleteMany
+   */
+  export type ProjetoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Projetos to delete
+     */
+    where?: ProjetoWhereInput
+    /**
+     * Limit how many Projetos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Projeto.tecnologias
+   */
+  export type Projeto$tecnologiasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tecnologia
+     */
+    select?: TecnologiaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tecnologia
+     */
+    omit?: TecnologiaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TecnologiaInclude<ExtArgs> | null
+    where?: TecnologiaWhereInput
+    orderBy?: TecnologiaOrderByWithRelationInput | TecnologiaOrderByWithRelationInput[]
+    cursor?: TecnologiaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TecnologiaScalarFieldEnum | TecnologiaScalarFieldEnum[]
+  }
+
+  /**
+   * Projeto without action
+   */
+  export type ProjetoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Projeto
+     */
+    select?: ProjetoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Projeto
+     */
+    omit?: ProjetoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjetoInclude<ExtArgs> | null
   }
 
 
@@ -1912,6 +3283,20 @@ export namespace Prisma {
   };
 
   export type TecnologiaScalarFieldEnum = (typeof TecnologiaScalarFieldEnum)[keyof typeof TecnologiaScalarFieldEnum]
+
+
+  export const ProjetoScalarFieldEnum: {
+    id: 'id',
+    nome: 'nome',
+    descricao: 'descricao',
+    imagem: 'imagem',
+    nivel: 'nivel',
+    tipo: 'tipo',
+    destaque: 'destaque',
+    repositorio: 'repositorio'
+  };
+
+  export type ProjetoScalarFieldEnum = (typeof ProjetoScalarFieldEnum)[keyof typeof ProjetoScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -1996,6 +3381,7 @@ export namespace Prisma {
     descricao?: StringFilter<"Tecnologia"> | string
     imagem?: StringFilter<"Tecnologia"> | string
     destaque?: BoolFilter<"Tecnologia"> | boolean
+    projetos?: ProjetoListRelationFilter
   }
 
   export type TecnologiaOrderByWithRelationInput = {
@@ -2004,6 +3390,7 @@ export namespace Prisma {
     descricao?: SortOrder
     imagem?: SortOrder
     destaque?: SortOrder
+    projetos?: ProjetoOrderByRelationAggregateInput
   }
 
   export type TecnologiaWhereUniqueInput = Prisma.AtLeast<{
@@ -2015,6 +3402,7 @@ export namespace Prisma {
     descricao?: StringFilter<"Tecnologia"> | string
     imagem?: StringFilter<"Tecnologia"> | string
     destaque?: BoolFilter<"Tecnologia"> | boolean
+    projetos?: ProjetoListRelationFilter
   }, "id">
 
   export type TecnologiaOrderByWithAggregationInput = {
@@ -2041,11 +3429,84 @@ export namespace Prisma {
     destaque?: BoolWithAggregatesFilter<"Tecnologia"> | boolean
   }
 
+  export type ProjetoWhereInput = {
+    AND?: ProjetoWhereInput | ProjetoWhereInput[]
+    OR?: ProjetoWhereInput[]
+    NOT?: ProjetoWhereInput | ProjetoWhereInput[]
+    id?: IntFilter<"Projeto"> | number
+    nome?: StringFilter<"Projeto"> | string
+    descricao?: StringFilter<"Projeto"> | string
+    imagem?: StringNullableListFilter<"Projeto">
+    nivel?: IntFilter<"Projeto"> | number
+    tipo?: StringFilter<"Projeto"> | string
+    destaque?: BoolFilter<"Projeto"> | boolean
+    repositorio?: StringFilter<"Projeto"> | string
+    tecnologias?: TecnologiaListRelationFilter
+  }
+
+  export type ProjetoOrderByWithRelationInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    descricao?: SortOrder
+    imagem?: SortOrder
+    nivel?: SortOrder
+    tipo?: SortOrder
+    destaque?: SortOrder
+    repositorio?: SortOrder
+    tecnologias?: TecnologiaOrderByRelationAggregateInput
+  }
+
+  export type ProjetoWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: ProjetoWhereInput | ProjetoWhereInput[]
+    OR?: ProjetoWhereInput[]
+    NOT?: ProjetoWhereInput | ProjetoWhereInput[]
+    nome?: StringFilter<"Projeto"> | string
+    descricao?: StringFilter<"Projeto"> | string
+    imagem?: StringNullableListFilter<"Projeto">
+    nivel?: IntFilter<"Projeto"> | number
+    tipo?: StringFilter<"Projeto"> | string
+    destaque?: BoolFilter<"Projeto"> | boolean
+    repositorio?: StringFilter<"Projeto"> | string
+    tecnologias?: TecnologiaListRelationFilter
+  }, "id">
+
+  export type ProjetoOrderByWithAggregationInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    descricao?: SortOrder
+    imagem?: SortOrder
+    nivel?: SortOrder
+    tipo?: SortOrder
+    destaque?: SortOrder
+    repositorio?: SortOrder
+    _count?: ProjetoCountOrderByAggregateInput
+    _avg?: ProjetoAvgOrderByAggregateInput
+    _max?: ProjetoMaxOrderByAggregateInput
+    _min?: ProjetoMinOrderByAggregateInput
+    _sum?: ProjetoSumOrderByAggregateInput
+  }
+
+  export type ProjetoScalarWhereWithAggregatesInput = {
+    AND?: ProjetoScalarWhereWithAggregatesInput | ProjetoScalarWhereWithAggregatesInput[]
+    OR?: ProjetoScalarWhereWithAggregatesInput[]
+    NOT?: ProjetoScalarWhereWithAggregatesInput | ProjetoScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Projeto"> | number
+    nome?: StringWithAggregatesFilter<"Projeto"> | string
+    descricao?: StringWithAggregatesFilter<"Projeto"> | string
+    imagem?: StringNullableListFilter<"Projeto">
+    nivel?: IntWithAggregatesFilter<"Projeto"> | number
+    tipo?: StringWithAggregatesFilter<"Projeto"> | string
+    destaque?: BoolWithAggregatesFilter<"Projeto"> | boolean
+    repositorio?: StringWithAggregatesFilter<"Projeto"> | string
+  }
+
   export type TecnologiaCreateInput = {
     nome: string
     descricao: string
     imagem: string
     destaque?: boolean
+    projetos?: ProjetoCreateNestedManyWithoutTecnologiasInput
   }
 
   export type TecnologiaUncheckedCreateInput = {
@@ -2054,6 +3515,7 @@ export namespace Prisma {
     descricao: string
     imagem: string
     destaque?: boolean
+    projetos?: ProjetoUncheckedCreateNestedManyWithoutTecnologiasInput
   }
 
   export type TecnologiaUpdateInput = {
@@ -2061,6 +3523,7 @@ export namespace Prisma {
     descricao?: StringFieldUpdateOperationsInput | string
     imagem?: StringFieldUpdateOperationsInput | string
     destaque?: BoolFieldUpdateOperationsInput | boolean
+    projetos?: ProjetoUpdateManyWithoutTecnologiasNestedInput
   }
 
   export type TecnologiaUncheckedUpdateInput = {
@@ -2069,6 +3532,7 @@ export namespace Prisma {
     descricao?: StringFieldUpdateOperationsInput | string
     imagem?: StringFieldUpdateOperationsInput | string
     destaque?: BoolFieldUpdateOperationsInput | boolean
+    projetos?: ProjetoUncheckedUpdateManyWithoutTecnologiasNestedInput
   }
 
   export type TecnologiaCreateManyInput = {
@@ -2092,6 +3556,84 @@ export namespace Prisma {
     descricao?: StringFieldUpdateOperationsInput | string
     imagem?: StringFieldUpdateOperationsInput | string
     destaque?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type ProjetoCreateInput = {
+    nome: string
+    descricao: string
+    imagem?: ProjetoCreateimagemInput | string[]
+    nivel: number
+    tipo: string
+    destaque?: boolean
+    repositorio: string
+    tecnologias?: TecnologiaCreateNestedManyWithoutProjetosInput
+  }
+
+  export type ProjetoUncheckedCreateInput = {
+    id?: number
+    nome: string
+    descricao: string
+    imagem?: ProjetoCreateimagemInput | string[]
+    nivel: number
+    tipo: string
+    destaque?: boolean
+    repositorio: string
+    tecnologias?: TecnologiaUncheckedCreateNestedManyWithoutProjetosInput
+  }
+
+  export type ProjetoUpdateInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: ProjetoUpdateimagemInput | string[]
+    nivel?: IntFieldUpdateOperationsInput | number
+    tipo?: StringFieldUpdateOperationsInput | string
+    destaque?: BoolFieldUpdateOperationsInput | boolean
+    repositorio?: StringFieldUpdateOperationsInput | string
+    tecnologias?: TecnologiaUpdateManyWithoutProjetosNestedInput
+  }
+
+  export type ProjetoUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: ProjetoUpdateimagemInput | string[]
+    nivel?: IntFieldUpdateOperationsInput | number
+    tipo?: StringFieldUpdateOperationsInput | string
+    destaque?: BoolFieldUpdateOperationsInput | boolean
+    repositorio?: StringFieldUpdateOperationsInput | string
+    tecnologias?: TecnologiaUncheckedUpdateManyWithoutProjetosNestedInput
+  }
+
+  export type ProjetoCreateManyInput = {
+    id?: number
+    nome: string
+    descricao: string
+    imagem?: ProjetoCreateimagemInput | string[]
+    nivel: number
+    tipo: string
+    destaque?: boolean
+    repositorio: string
+  }
+
+  export type ProjetoUpdateManyMutationInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: ProjetoUpdateimagemInput | string[]
+    nivel?: IntFieldUpdateOperationsInput | number
+    tipo?: StringFieldUpdateOperationsInput | string
+    destaque?: BoolFieldUpdateOperationsInput | boolean
+    repositorio?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ProjetoUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: ProjetoUpdateimagemInput | string[]
+    nivel?: IntFieldUpdateOperationsInput | number
+    tipo?: StringFieldUpdateOperationsInput | string
+    destaque?: BoolFieldUpdateOperationsInput | boolean
+    repositorio?: StringFieldUpdateOperationsInput | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -2123,6 +3665,16 @@ export namespace Prisma {
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type ProjetoListRelationFilter = {
+    every?: ProjetoWhereInput
+    some?: ProjetoWhereInput
+    none?: ProjetoWhereInput
+  }
+
+  export type ProjetoOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type TecnologiaCountOrderByAggregateInput = {
@@ -2199,6 +3751,77 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type TecnologiaListRelationFilter = {
+    every?: TecnologiaWhereInput
+    some?: TecnologiaWhereInput
+    none?: TecnologiaWhereInput
+  }
+
+  export type TecnologiaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProjetoCountOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    descricao?: SortOrder
+    imagem?: SortOrder
+    nivel?: SortOrder
+    tipo?: SortOrder
+    destaque?: SortOrder
+    repositorio?: SortOrder
+  }
+
+  export type ProjetoAvgOrderByAggregateInput = {
+    id?: SortOrder
+    nivel?: SortOrder
+  }
+
+  export type ProjetoMaxOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    descricao?: SortOrder
+    nivel?: SortOrder
+    tipo?: SortOrder
+    destaque?: SortOrder
+    repositorio?: SortOrder
+  }
+
+  export type ProjetoMinOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    descricao?: SortOrder
+    nivel?: SortOrder
+    tipo?: SortOrder
+    destaque?: SortOrder
+    repositorio?: SortOrder
+  }
+
+  export type ProjetoSumOrderByAggregateInput = {
+    id?: SortOrder
+    nivel?: SortOrder
+  }
+
+  export type ProjetoCreateNestedManyWithoutTecnologiasInput = {
+    create?: XOR<ProjetoCreateWithoutTecnologiasInput, ProjetoUncheckedCreateWithoutTecnologiasInput> | ProjetoCreateWithoutTecnologiasInput[] | ProjetoUncheckedCreateWithoutTecnologiasInput[]
+    connectOrCreate?: ProjetoCreateOrConnectWithoutTecnologiasInput | ProjetoCreateOrConnectWithoutTecnologiasInput[]
+    connect?: ProjetoWhereUniqueInput | ProjetoWhereUniqueInput[]
+  }
+
+  export type ProjetoUncheckedCreateNestedManyWithoutTecnologiasInput = {
+    create?: XOR<ProjetoCreateWithoutTecnologiasInput, ProjetoUncheckedCreateWithoutTecnologiasInput> | ProjetoCreateWithoutTecnologiasInput[] | ProjetoUncheckedCreateWithoutTecnologiasInput[]
+    connectOrCreate?: ProjetoCreateOrConnectWithoutTecnologiasInput | ProjetoCreateOrConnectWithoutTecnologiasInput[]
+    connect?: ProjetoWhereUniqueInput | ProjetoWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -2207,12 +3830,85 @@ export namespace Prisma {
     set?: boolean
   }
 
+  export type ProjetoUpdateManyWithoutTecnologiasNestedInput = {
+    create?: XOR<ProjetoCreateWithoutTecnologiasInput, ProjetoUncheckedCreateWithoutTecnologiasInput> | ProjetoCreateWithoutTecnologiasInput[] | ProjetoUncheckedCreateWithoutTecnologiasInput[]
+    connectOrCreate?: ProjetoCreateOrConnectWithoutTecnologiasInput | ProjetoCreateOrConnectWithoutTecnologiasInput[]
+    upsert?: ProjetoUpsertWithWhereUniqueWithoutTecnologiasInput | ProjetoUpsertWithWhereUniqueWithoutTecnologiasInput[]
+    set?: ProjetoWhereUniqueInput | ProjetoWhereUniqueInput[]
+    disconnect?: ProjetoWhereUniqueInput | ProjetoWhereUniqueInput[]
+    delete?: ProjetoWhereUniqueInput | ProjetoWhereUniqueInput[]
+    connect?: ProjetoWhereUniqueInput | ProjetoWhereUniqueInput[]
+    update?: ProjetoUpdateWithWhereUniqueWithoutTecnologiasInput | ProjetoUpdateWithWhereUniqueWithoutTecnologiasInput[]
+    updateMany?: ProjetoUpdateManyWithWhereWithoutTecnologiasInput | ProjetoUpdateManyWithWhereWithoutTecnologiasInput[]
+    deleteMany?: ProjetoScalarWhereInput | ProjetoScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type ProjetoUncheckedUpdateManyWithoutTecnologiasNestedInput = {
+    create?: XOR<ProjetoCreateWithoutTecnologiasInput, ProjetoUncheckedCreateWithoutTecnologiasInput> | ProjetoCreateWithoutTecnologiasInput[] | ProjetoUncheckedCreateWithoutTecnologiasInput[]
+    connectOrCreate?: ProjetoCreateOrConnectWithoutTecnologiasInput | ProjetoCreateOrConnectWithoutTecnologiasInput[]
+    upsert?: ProjetoUpsertWithWhereUniqueWithoutTecnologiasInput | ProjetoUpsertWithWhereUniqueWithoutTecnologiasInput[]
+    set?: ProjetoWhereUniqueInput | ProjetoWhereUniqueInput[]
+    disconnect?: ProjetoWhereUniqueInput | ProjetoWhereUniqueInput[]
+    delete?: ProjetoWhereUniqueInput | ProjetoWhereUniqueInput[]
+    connect?: ProjetoWhereUniqueInput | ProjetoWhereUniqueInput[]
+    update?: ProjetoUpdateWithWhereUniqueWithoutTecnologiasInput | ProjetoUpdateWithWhereUniqueWithoutTecnologiasInput[]
+    updateMany?: ProjetoUpdateManyWithWhereWithoutTecnologiasInput | ProjetoUpdateManyWithWhereWithoutTecnologiasInput[]
+    deleteMany?: ProjetoScalarWhereInput | ProjetoScalarWhereInput[]
+  }
+
+  export type ProjetoCreateimagemInput = {
+    set: string[]
+  }
+
+  export type TecnologiaCreateNestedManyWithoutProjetosInput = {
+    create?: XOR<TecnologiaCreateWithoutProjetosInput, TecnologiaUncheckedCreateWithoutProjetosInput> | TecnologiaCreateWithoutProjetosInput[] | TecnologiaUncheckedCreateWithoutProjetosInput[]
+    connectOrCreate?: TecnologiaCreateOrConnectWithoutProjetosInput | TecnologiaCreateOrConnectWithoutProjetosInput[]
+    connect?: TecnologiaWhereUniqueInput | TecnologiaWhereUniqueInput[]
+  }
+
+  export type TecnologiaUncheckedCreateNestedManyWithoutProjetosInput = {
+    create?: XOR<TecnologiaCreateWithoutProjetosInput, TecnologiaUncheckedCreateWithoutProjetosInput> | TecnologiaCreateWithoutProjetosInput[] | TecnologiaUncheckedCreateWithoutProjetosInput[]
+    connectOrCreate?: TecnologiaCreateOrConnectWithoutProjetosInput | TecnologiaCreateOrConnectWithoutProjetosInput[]
+    connect?: TecnologiaWhereUniqueInput | TecnologiaWhereUniqueInput[]
+  }
+
+  export type ProjetoUpdateimagemInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type TecnologiaUpdateManyWithoutProjetosNestedInput = {
+    create?: XOR<TecnologiaCreateWithoutProjetosInput, TecnologiaUncheckedCreateWithoutProjetosInput> | TecnologiaCreateWithoutProjetosInput[] | TecnologiaUncheckedCreateWithoutProjetosInput[]
+    connectOrCreate?: TecnologiaCreateOrConnectWithoutProjetosInput | TecnologiaCreateOrConnectWithoutProjetosInput[]
+    upsert?: TecnologiaUpsertWithWhereUniqueWithoutProjetosInput | TecnologiaUpsertWithWhereUniqueWithoutProjetosInput[]
+    set?: TecnologiaWhereUniqueInput | TecnologiaWhereUniqueInput[]
+    disconnect?: TecnologiaWhereUniqueInput | TecnologiaWhereUniqueInput[]
+    delete?: TecnologiaWhereUniqueInput | TecnologiaWhereUniqueInput[]
+    connect?: TecnologiaWhereUniqueInput | TecnologiaWhereUniqueInput[]
+    update?: TecnologiaUpdateWithWhereUniqueWithoutProjetosInput | TecnologiaUpdateWithWhereUniqueWithoutProjetosInput[]
+    updateMany?: TecnologiaUpdateManyWithWhereWithoutProjetosInput | TecnologiaUpdateManyWithWhereWithoutProjetosInput[]
+    deleteMany?: TecnologiaScalarWhereInput | TecnologiaScalarWhereInput[]
+  }
+
+  export type TecnologiaUncheckedUpdateManyWithoutProjetosNestedInput = {
+    create?: XOR<TecnologiaCreateWithoutProjetosInput, TecnologiaUncheckedCreateWithoutProjetosInput> | TecnologiaCreateWithoutProjetosInput[] | TecnologiaUncheckedCreateWithoutProjetosInput[]
+    connectOrCreate?: TecnologiaCreateOrConnectWithoutProjetosInput | TecnologiaCreateOrConnectWithoutProjetosInput[]
+    upsert?: TecnologiaUpsertWithWhereUniqueWithoutProjetosInput | TecnologiaUpsertWithWhereUniqueWithoutProjetosInput[]
+    set?: TecnologiaWhereUniqueInput | TecnologiaWhereUniqueInput[]
+    disconnect?: TecnologiaWhereUniqueInput | TecnologiaWhereUniqueInput[]
+    delete?: TecnologiaWhereUniqueInput | TecnologiaWhereUniqueInput[]
+    connect?: TecnologiaWhereUniqueInput | TecnologiaWhereUniqueInput[]
+    update?: TecnologiaUpdateWithWhereUniqueWithoutProjetosInput | TecnologiaUpdateWithWhereUniqueWithoutProjetosInput[]
+    updateMany?: TecnologiaUpdateManyWithWhereWithoutProjetosInput | TecnologiaUpdateManyWithWhereWithoutProjetosInput[]
+    deleteMany?: TecnologiaScalarWhereInput | TecnologiaScalarWhereInput[]
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -2295,6 +3991,164 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type ProjetoCreateWithoutTecnologiasInput = {
+    nome: string
+    descricao: string
+    imagem?: ProjetoCreateimagemInput | string[]
+    nivel: number
+    tipo: string
+    destaque?: boolean
+    repositorio: string
+  }
+
+  export type ProjetoUncheckedCreateWithoutTecnologiasInput = {
+    id?: number
+    nome: string
+    descricao: string
+    imagem?: ProjetoCreateimagemInput | string[]
+    nivel: number
+    tipo: string
+    destaque?: boolean
+    repositorio: string
+  }
+
+  export type ProjetoCreateOrConnectWithoutTecnologiasInput = {
+    where: ProjetoWhereUniqueInput
+    create: XOR<ProjetoCreateWithoutTecnologiasInput, ProjetoUncheckedCreateWithoutTecnologiasInput>
+  }
+
+  export type ProjetoUpsertWithWhereUniqueWithoutTecnologiasInput = {
+    where: ProjetoWhereUniqueInput
+    update: XOR<ProjetoUpdateWithoutTecnologiasInput, ProjetoUncheckedUpdateWithoutTecnologiasInput>
+    create: XOR<ProjetoCreateWithoutTecnologiasInput, ProjetoUncheckedCreateWithoutTecnologiasInput>
+  }
+
+  export type ProjetoUpdateWithWhereUniqueWithoutTecnologiasInput = {
+    where: ProjetoWhereUniqueInput
+    data: XOR<ProjetoUpdateWithoutTecnologiasInput, ProjetoUncheckedUpdateWithoutTecnologiasInput>
+  }
+
+  export type ProjetoUpdateManyWithWhereWithoutTecnologiasInput = {
+    where: ProjetoScalarWhereInput
+    data: XOR<ProjetoUpdateManyMutationInput, ProjetoUncheckedUpdateManyWithoutTecnologiasInput>
+  }
+
+  export type ProjetoScalarWhereInput = {
+    AND?: ProjetoScalarWhereInput | ProjetoScalarWhereInput[]
+    OR?: ProjetoScalarWhereInput[]
+    NOT?: ProjetoScalarWhereInput | ProjetoScalarWhereInput[]
+    id?: IntFilter<"Projeto"> | number
+    nome?: StringFilter<"Projeto"> | string
+    descricao?: StringFilter<"Projeto"> | string
+    imagem?: StringNullableListFilter<"Projeto">
+    nivel?: IntFilter<"Projeto"> | number
+    tipo?: StringFilter<"Projeto"> | string
+    destaque?: BoolFilter<"Projeto"> | boolean
+    repositorio?: StringFilter<"Projeto"> | string
+  }
+
+  export type TecnologiaCreateWithoutProjetosInput = {
+    nome: string
+    descricao: string
+    imagem: string
+    destaque?: boolean
+  }
+
+  export type TecnologiaUncheckedCreateWithoutProjetosInput = {
+    id?: number
+    nome: string
+    descricao: string
+    imagem: string
+    destaque?: boolean
+  }
+
+  export type TecnologiaCreateOrConnectWithoutProjetosInput = {
+    where: TecnologiaWhereUniqueInput
+    create: XOR<TecnologiaCreateWithoutProjetosInput, TecnologiaUncheckedCreateWithoutProjetosInput>
+  }
+
+  export type TecnologiaUpsertWithWhereUniqueWithoutProjetosInput = {
+    where: TecnologiaWhereUniqueInput
+    update: XOR<TecnologiaUpdateWithoutProjetosInput, TecnologiaUncheckedUpdateWithoutProjetosInput>
+    create: XOR<TecnologiaCreateWithoutProjetosInput, TecnologiaUncheckedCreateWithoutProjetosInput>
+  }
+
+  export type TecnologiaUpdateWithWhereUniqueWithoutProjetosInput = {
+    where: TecnologiaWhereUniqueInput
+    data: XOR<TecnologiaUpdateWithoutProjetosInput, TecnologiaUncheckedUpdateWithoutProjetosInput>
+  }
+
+  export type TecnologiaUpdateManyWithWhereWithoutProjetosInput = {
+    where: TecnologiaScalarWhereInput
+    data: XOR<TecnologiaUpdateManyMutationInput, TecnologiaUncheckedUpdateManyWithoutProjetosInput>
+  }
+
+  export type TecnologiaScalarWhereInput = {
+    AND?: TecnologiaScalarWhereInput | TecnologiaScalarWhereInput[]
+    OR?: TecnologiaScalarWhereInput[]
+    NOT?: TecnologiaScalarWhereInput | TecnologiaScalarWhereInput[]
+    id?: IntFilter<"Tecnologia"> | number
+    nome?: StringFilter<"Tecnologia"> | string
+    descricao?: StringFilter<"Tecnologia"> | string
+    imagem?: StringFilter<"Tecnologia"> | string
+    destaque?: BoolFilter<"Tecnologia"> | boolean
+  }
+
+  export type ProjetoUpdateWithoutTecnologiasInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: ProjetoUpdateimagemInput | string[]
+    nivel?: IntFieldUpdateOperationsInput | number
+    tipo?: StringFieldUpdateOperationsInput | string
+    destaque?: BoolFieldUpdateOperationsInput | boolean
+    repositorio?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ProjetoUncheckedUpdateWithoutTecnologiasInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: ProjetoUpdateimagemInput | string[]
+    nivel?: IntFieldUpdateOperationsInput | number
+    tipo?: StringFieldUpdateOperationsInput | string
+    destaque?: BoolFieldUpdateOperationsInput | boolean
+    repositorio?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ProjetoUncheckedUpdateManyWithoutTecnologiasInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: ProjetoUpdateimagemInput | string[]
+    nivel?: IntFieldUpdateOperationsInput | number
+    tipo?: StringFieldUpdateOperationsInput | string
+    destaque?: BoolFieldUpdateOperationsInput | boolean
+    repositorio?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TecnologiaUpdateWithoutProjetosInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: StringFieldUpdateOperationsInput | string
+    destaque?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type TecnologiaUncheckedUpdateWithoutProjetosInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: StringFieldUpdateOperationsInput | string
+    destaque?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type TecnologiaUncheckedUpdateManyWithoutProjetosInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: StringFieldUpdateOperationsInput | string
+    destaque?: BoolFieldUpdateOperationsInput | boolean
   }
 
 
