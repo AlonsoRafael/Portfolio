@@ -2,12 +2,11 @@
 
 Este repositório contém o código-fonte do meu site de portfólio pessoal, desenvolvido com o objetivo de apresentar minhas habilidades, projetos e experiências profissionais de forma organizada e acessível.
 
-##  Acesse o Portfólio
+## Acesse o Portfólio
 
 Você pode acessar o site diretamente pelo link abaixo:
 
-👉 [meusite.com](https://seulink.github.io/seu-repositorio)  
-*(substitua pelo link real do GitHub Pages ou domínio personalizado)*
+👉 [meusite.com](https://seulink.github.io/seu-repositorio)
 
 ## 🧰 Tecnologias Utilizadas
 
@@ -23,7 +22,6 @@ Você pode acessar o site diretamente pelo link abaixo:
 ├── /css # Estilos personalizados
 ├── /js # Scripts JavaScript
 └── README.md # Documentação do projeto
-
 
 ## 💼 Sobre o Portfólio
 
@@ -49,3 +47,4 @@ Este portfólio está hospedado via **GitHub Pages**. Para clonar e executar loc
 ```bash
 git clone https://github.com/seuusuario/seurepositorio.git
 cd seurepositorio****
+```

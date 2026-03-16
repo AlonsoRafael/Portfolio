@@ -9,6 +9,7 @@ generator client {
   output   = "../generated/prisma"
 }
 
+// @prisma-fmt-ignore
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
@@ -16,11 +17,26 @@ datasource db {
 }
 
 model Tecnologia {
-  id        Int     @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   nome      String
   descricao String
   imagem    String
-  destaque  Boolean @default(false)
+  destaque  Boolean   @default(false)
+  projetos  Projeto[]
 
   @@map("tecnologias")
+}
+
+model Projeto {
+  id          Int          @id @default(autoincrement())
+  nome        String
+  descricao   String
+  imagem      String[]
+  nivel       Int
+  tipo        String
+  destaque    Boolean      @default(false)
+  repositorio String
+  tecnologias Tecnologia[]
+
+  @@map("projetos")
 }
