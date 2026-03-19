@@ -31,4 +31,14 @@ id,nome,destaque,descricao,imagem
 30,R,false,Linguagem de programação voltada para estatística e análise de dados.,https://github.com/AlonsoRafael/assets/raw/main/imagem/r.svg
 31,C,false,Linguagem de programação de baixo nível amplamente usada em sistemas operacionais e embarcados.,https://github.com/AlonsoRafael/assets/raw/main/imagem/c.svg
 32,C++,false,Linguagem de programação orientada a objetos e de alto desempenho.,https://github.com/AlonsoRafael/assets/raw/main/imagem/cplusplus.svg
-33,R,false,Sistema operacional de código aberto baseado no núcleo Linux.,https://github.com/AlonsoRafael/assets/raw/main/imagem/linux.svg
+33,Linux,false,Sistema operacional de código aberto baseado no núcleo Linux.,https://github.com/AlonsoRafael/assets/raw/main/imagem/linux.svg
+34,n8n,false,Ferramenta avançada de automação de fluxo de trabalho baseada em nós.,https://github.com/AlonsoRafael/assets/raw/main/imagem/n8n.svg
+35,Evolution API,false,API open-source para integração e automação avançada de mensagens no WhatsApp.,https://github.com/AlonsoRafael/assets/raw/main/imagem/evolution_api.svg
+36,Rust,false,"Linguagem de programação de sistemas focada em segurança, velocidade e concorrência.",https://github.com/AlonsoRafael/assets/raw/main/imagem/rust.svg
+37,gRPC,false,Framework de alto desempenho e código aberto para chamadas de procedimento remoto (RPC).,https://github.com/AlonsoRafael/assets/raw/main/imagem/gRPC.svg
+38,MQTT,false,"Protocolo de mensagens de rede leve, ideal para Internet das Coisas (IoT).",https://github.com/AlonsoRafael/assets/raw/main/imagem/mqtt.svg
+39,Mosquitto,false,Broker de mensagens open-source leve que implementa o protocolo MQTT.,https://github.com/AlonsoRafael/assets/raw/main/imagem/mosquitto.svg
+40,Kotlin,false,"Linguagem de programação moderna, concisa e totalmente interoperável com Java, oficial para Android.",https://github.com/AlonsoRafael/assets/raw/main/imagem/kotlin.svg
+41,Jetpack Compose,false,Toolkit moderno do Android para construir interfaces de usuário nativas de forma declarativa.,https://github.com/AlonsoRafael/assets/raw/main/imagem/jetpack_compose.svg
+42,ZegoCloud,false,Plataforma de infraestrutura de nuvem para comunicação em tempo real.,https://github.com/AlonsoRafael/assets/raw/main/imagem/zegocloud.svg
+43,PySide6,false,Módulo oficial do Python que provê acesso ao framework Qt para criação de interfaces gráficas (GUI).,https://github.com/AlonsoRafael/assets/raw/main/imagem/pyside6.svg

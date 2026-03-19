@@ -1,2 +1,3 @@
-declare const x = 123;
-export { x };
+export * from "./projeto";
+export * from "./tecnologia";
+export * from "./shared";
