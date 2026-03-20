@@ -1,0 +1,21 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "Este repositório contém o código-fonte do meu site de portfólio pessoal, desenvolvido com o objetivo de apresentar minhas habilidades, projetos e experiências profissionais de forma organizada e acessível.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx concurrently \"cd backend && npm run start:dev\" \"cd frontend && npm run dev\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlonsoRafael/Portfolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AlonsoRafael/Portfolio/issues"
+  },
+  "homepage": "https://github.com/AlonsoRafael/Portfolio#readme"
+}
