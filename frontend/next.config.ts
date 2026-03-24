@@ -1,8 +1,20 @@
 import type { NextConfig } from "next";
+import path from "node:path";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
-};
+turbopack: {
+root: path.join(__dirname, ".."),
+},
+
+  images: {
+    qualities: [75, 95],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+  },
+}
 
 export default nextConfig;
