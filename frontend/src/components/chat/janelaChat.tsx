@@ -36,11 +36,15 @@ export default function JanelaChat() {
 			</div>
 			{mensagens.length === 0 ? (
 				<div className="flex flex-col justify-center items-center min-h-[400] sm:min-[500]">
-					<IconMessages size={230} stroke={0.2} className="text-black/30" />
+					<IconMessages
+						size={120}
+						stroke={0.2}
+						className="text-black/30 sm:w-[180] sm:h-[180]"
+					/>
 					<span>Vamos Conversar?</span>
 				</div>
 			) : (
-				<div className="flex flex-col p-2 gap-2 min-h-[400] sm:min-[400] sm:max-h-[400] max-h-[400] overflow-y-scroll">
+				<div className="flex flex-col p-2 gap-2 h-[45vh] min-h-[260] sm:h-[360] sm:max-h-[400] overflow-y-scroll">
 					{mensagens.map((mensagem, i) => {
 						const mesmoAutor = i > 0 && mensagens[i - 1].autor === mensagem.autor
 						return (

@@ -22,7 +22,7 @@ export default function BotaoChat() {
 				side="top"
 				align="end"
 				sideOffset={10}
-				className="w-[400] sm:w-[500] p-0 rounded-2xl bg-transparent ring-0 border-0 shadow-none overflow-hidden"
+				className="className=w-[calc(100vw-1rem)] max-w-[420] sm:w-[420] p-0 rounded-2xl bg-transparent ring-0 border-0 shadow-none overflow-hidden"
 				style={{ backgroundColor: "transparent", border: "none" }}
 			>
 				<JanelaChat />
