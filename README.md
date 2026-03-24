@@ -23,7 +23,7 @@
 
 </div>
 
-## 🌐 Deploy
+## Deploy
 
 - Producao: https://alonsotech.vercel.app/
 
@@ -31,7 +31,7 @@ Uma aplicacao full stack para apresentar projetos, tecnologias e experiencias pr
 
 O projeto vai alem da vitrine tradicional: ele inclui um chat inteligente conectado por webhook, permitindo conversas em tempo real sobre stack, repositorios e historico profissional.
 
-## ✨ O que este projeto entrega
+## O que este projeto entrega
 
 - Landing page com destaque de tecnologias
 - Sessao de curriculo e apresentacao profissional
@@ -40,7 +40,7 @@ O projeto vai alem da vitrine tradicional: ele inclui um chat inteligente conect
 - Chat flutuante com persistencia local e integracao com n8n
 - API REST para consumo do frontend
 
-## 🏛️ Estrutura do monorepo
+## Estrutura do monorepo
 
 ```text
 Portfolio/
@@ -50,7 +50,7 @@ Portfolio/
 `- .gitassets/ # imagens do README
 ```
 
-## 🧩 Endpoints da API
+## Endpoints da API
 
 Base local padrao: http://localhost:4000
 
@@ -59,7 +59,7 @@ Base local padrao: http://localhost:4000
 - GET /tecnologias
 - GET /tecnologias/destaques
 
-## 🖥️ Como rodar este projeto
+## Como rodar este projeto
 
 ### Requisitos
 
@@ -161,7 +161,7 @@ Isso sobe:
 - npm run start
 - npm run lint
 
-## 💎 Links uteis
+## Links uteis
 
 - Next.js: https://nextjs.org/docs
 - NestJS: https://docs.nestjs.com
