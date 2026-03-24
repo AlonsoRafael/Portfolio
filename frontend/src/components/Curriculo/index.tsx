@@ -28,7 +28,7 @@ export default function Curriculo(props: CurriculoProps) {
 			</p>
 
 			<Link
-				href="/experiencias"
+				href="/experiencia"
 				className="mt-8 inline-flex items-center gap-2 text-sm sm:text-base font-semibold text-blue-900 underline decoration-zinc-700 underline-offset-4 hover:text-blue-400"
 			>
 				<span>Experiências</span>
