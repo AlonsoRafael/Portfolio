@@ -75,7 +75,7 @@ export default async function PaginaExperiencia() {
 						<ExperienciaItem
 							cargo="Desenvolvedor de Software"
 							empresa="Projeto OptiColorRT (UFU/FAPEMIG), Uberlândia"
-							periodo="2025"
+							periodo="jan de 2025 – jul de 2025"
 							detalhes={[
 								"Responsável pelo desenvolvimento de uma solução de software de alta precisão técnica, focada em performance e confiabilidade. O projeto resultou em um produto sólido de inovação tecnológica, culminando no registro oficial de propriedade intelectual junto ao INPI. Atuação em todo o ciclo de vida do software, garantindo padrões de qualidade exigidos para certificação e proteção institucional.",
 							]}
@@ -93,7 +93,7 @@ export default async function PaginaExperiencia() {
 						<ExperienciaItem
 							cargo="Alonso Tech"
 							empresa="PJ"
-							periodo="2025 - presente"
+							periodo="fev de 2024 - presente"
 							detalhes={[
 								"Especializados em transformar ideias complexas em interfaces intuitivas e sistemas eficientes.Desenvolvemos aplicações web modernas com foco total em usabilidade, velocidade e segurança de dados. Do gerenciamento de usuários à integração com serviços externos, cuidamos de toda a camada tecnológica para que você possa focar no que realmente importa: o seu sucesso. Inovação, performance e compromisso com o resultado final em cada linha de entrega.",
 							]}
