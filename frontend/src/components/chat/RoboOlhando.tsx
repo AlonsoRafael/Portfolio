@@ -72,18 +72,23 @@ function getOrLoadFrame(index: number): HTMLImageElement | null {
 	return loadedImages[safeIndex]
 }
 
-// Pré-carrega todos os frames em lotes no Desktop para animação 100% fluida e sem lag
+// Pré-carrega frames em lotes de forma suave e ociosa (idle) somente quando houver movimento de mouse no desktop
 function scheduleBackgroundPreload() {
 	if (typeof window === "undefined" || isPreloadStarted) return
+	
+	// Não executa em dispositivos touch/mobile
+	const isFinePointer = window.matchMedia("(pointer: fine)").matches
+	if (!isFinePointer) return
+
 	isPreloadStarted = true
 	initImagesArray()
 
-	// Pré-carrega primeiro o frame central
+	// Pré-carrega o frame central
 	getOrLoadFrame(ROBOT_CENTER_FRAME)
 
 	const startPreload = () => {
 		let currentIdx = 0
-		const batchSize = 16
+		const batchSize = 8
 
 		function loadNextBatch() {
 			const end = Math.min(ROBOT_TOTAL_FRAMES, currentIdx + batchSize)
@@ -99,7 +104,7 @@ function scheduleBackgroundPreload() {
 				if ("requestIdleCallback" in window) {
 					;(window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(loadNextBatch)
 				} else {
-					setTimeout(loadNextBatch, 30)
+					setTimeout(loadNextBatch, 150)
 				}
 			}
 		}
@@ -107,25 +112,16 @@ function scheduleBackgroundPreload() {
 		if ("requestIdleCallback" in window) {
 			;(window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(loadNextBatch)
 		} else {
-			setTimeout(loadNextBatch, 100)
+			setTimeout(loadNextBatch, 200)
 		}
 	}
 
 	const trigger = () => {
 		window.removeEventListener("pointermove", trigger)
-		window.removeEventListener("scroll", trigger)
 		startPreload()
 	}
 
-	window.addEventListener("pointermove", trigger, { passive: true })
-	window.addEventListener("scroll", trigger, { passive: true })
-
-	// Fallback para pré-carregar caso o usuário não interaja de imediato no desktop
-	if (document.readyState === "complete") {
-		setTimeout(startPreload, 1500)
-	} else {
-		window.addEventListener("load", () => setTimeout(startPreload, 1500), { once: true })
-	}
+	window.addEventListener("pointermove", trigger, { passive: true, once: true })
 }
 
 export default function RoboOlhando({
@@ -136,7 +132,12 @@ export default function RoboOlhando({
 }: RoboOlhandoProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 	const containerRef = useRef<HTMLDivElement>(null)
-	const [isMobile, setIsMobile] = useState<boolean>(false)
+	const [isMobile, setIsMobile] = useState<boolean>(() => {
+		if (typeof window !== "undefined") {
+			return window.innerWidth < 640 || window.matchMedia("(pointer: coarse)").matches
+		}
+		return false
+	})
 
 	const aspectRatio = ROBOT_FRAME_HEIGHT / ROBOT_FRAME_WIDTH
 	const defaultWidth = size || 56
