@@ -72,7 +72,7 @@ function getOrLoadFrame(index: number): HTMLImageElement | null {
 	return loadedImages[safeIndex]
 }
 
-// Carrega os frames em lotes de forma não bloqueante (após a carga inicial da página)
+// Pré-carrega todos os frames em lotes para animação 100% fluida e sem lag
 function scheduleBackgroundPreload() {
 	if (typeof window === "undefined" || isPreloadStarted) return
 	isPreloadStarted = true
@@ -83,7 +83,7 @@ function scheduleBackgroundPreload() {
 
 	const startPreload = () => {
 		let currentIdx = 0
-		const batchSize = 12
+		const batchSize = 16
 
 		function loadNextBatch() {
 			const end = Math.min(ROBOT_TOTAL_FRAMES, currentIdx + batchSize)
@@ -99,7 +99,7 @@ function scheduleBackgroundPreload() {
 				if ("requestIdleCallback" in window) {
 					;(window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(loadNextBatch)
 				} else {
-					setTimeout(loadNextBatch, 50)
+					setTimeout(loadNextBatch, 30)
 				}
 			}
 		}
@@ -107,14 +107,26 @@ function scheduleBackgroundPreload() {
 		if ("requestIdleCallback" in window) {
 			;(window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(loadNextBatch)
 		} else {
-			setTimeout(loadNextBatch, 200)
+			setTimeout(loadNextBatch, 100)
 		}
 	}
 
+	const trigger = () => {
+		window.removeEventListener("pointermove", trigger)
+		window.removeEventListener("scroll", trigger)
+		window.removeEventListener("touchstart", trigger)
+		startPreload()
+	}
+
+	window.addEventListener("pointermove", trigger, { passive: true })
+	window.addEventListener("scroll", trigger, { passive: true })
+	window.addEventListener("touchstart", trigger, { passive: true })
+
+	// Fallback para pré-carregar caso o usuário não interaja de imediato
 	if (document.readyState === "complete") {
-		setTimeout(startPreload, 300)
+		setTimeout(startPreload, 2000)
 	} else {
-		window.addEventListener("load", () => setTimeout(startPreload, 300), { once: true })
+		window.addEventListener("load", () => setTimeout(startPreload, 2000), { once: true })
 	}
 }
 
@@ -146,7 +158,7 @@ export default function RoboOlhando({
 	useEffect(() => {
 		if (typeof window === "undefined" || !interactive) return
 
-		// Garante que o frame central esteja carregado
+		// Garante que o frame central esteja carregado e inicia o pré-carregamento completo
 		const centerImg = getOrLoadFrame(ROBOT_CENTER_FRAME)
 		scheduleBackgroundPreload()
 
@@ -280,9 +292,6 @@ export default function RoboOlhando({
 
 		window.addEventListener("mousemove", handleMouseMove, { passive: true })
 		window.addEventListener("touchmove", handleTouchMove, { passive: true })
-
-		// Inicia um ciclo curto para estabilizar no centro
-		wakeUpLoop()
 
 		return () => {
 			if (animFrameIdRef.current) {

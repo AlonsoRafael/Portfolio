@@ -76,8 +76,7 @@ export default function Projetos(props: ProjetosProps) {
 											alt={`Demonstração do projeto ${projeto.nome}`}
 											fill
 											sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-											quality={90}
-											priority={index === 0}
+											quality={80}
 											className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
 										/>
 									) : (

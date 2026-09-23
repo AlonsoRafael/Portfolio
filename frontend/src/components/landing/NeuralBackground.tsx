@@ -228,29 +228,28 @@ export default function NeuralBackground() {
 		let mouseRadius: number
 
 		if (isCompactBar) {
-			// Equilíbrio ideal para a top bar (30 a 40 nós bem distribuídos)
-			count = isMobile ? 18 : isTablet ? 28 : 38
-			specksCount = isMobile ? 12 : 20
+			count = isMobile ? 12 : isTablet ? 22 : 32
+			specksCount = isMobile ? 8 : 16
 			mouseRadius = 120
 		} else if (isMobile) {
-			// Telas pequenas (mobile full): 22 a 30 nós, laterais limpas sem poluir o centro
-			count = Math.min(30, Math.max(22, Math.round(width / 18)))
-			specksCount = 18
-			mouseRadius = 130
+			// Telas pequenas (mobile full): 14 a 18 nós super fluidos e leves
+			count = Math.min(18, Math.max(14, Math.round(width / 24)))
+			specksCount = 8
+			mouseRadius = 120
 		} else if (isTablet) {
-			// Tablets: 45 a 65 nós
-			count = Math.min(65, Math.max(45, Math.round(width / 15)))
-			specksCount = 30
+			// Tablets: 35 a 48 nós
+			count = Math.min(48, Math.max(35, Math.round(width / 18)))
+			specksCount = 20
 			mouseRadius = 170
 		} else if (isDesktop) {
-			// Desktops / Laptops: 75 a 105 nós
-			count = Math.min(105, Math.max(75, Math.round(width / 14)))
-			specksCount = 45
+			// Desktops / Laptops: 60 a 80 nós
+			count = Math.min(80, Math.max(60, Math.round(width / 16)))
+			specksCount = 35
 			mouseRadius = 210
 		} else {
-			// Telas grandes / Ultrawide: 110 a 140 nós
-			count = Math.min(140, Math.max(110, Math.round(width / 13)))
-			specksCount = 55
+			// Telas grandes / Ultrawide: 85 a 110 nós
+			count = Math.min(110, Math.max(85, Math.round(width / 15)))
+			specksCount = 45
 			mouseRadius = 230
 		}
 
