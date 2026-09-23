@@ -72,58 +72,6 @@ function getOrLoadFrame(index: number): HTMLImageElement | null {
 	return loadedImages[safeIndex]
 }
 
-// Pré-carrega frames em lotes de forma suave e ociosa (idle) somente quando houver movimento de mouse no desktop
-function scheduleBackgroundPreload() {
-	if (typeof window === "undefined" || isPreloadStarted) return
-	
-	// Não executa em dispositivos touch/mobile
-	const isFinePointer = window.matchMedia("(pointer: fine)").matches
-	if (!isFinePointer) return
-
-	isPreloadStarted = true
-	initImagesArray()
-
-	// Pré-carrega o frame central
-	getOrLoadFrame(ROBOT_CENTER_FRAME)
-
-	const startPreload = () => {
-		let currentIdx = 0
-		const batchSize = 8
-
-		function loadNextBatch() {
-			const end = Math.min(ROBOT_TOTAL_FRAMES, currentIdx + batchSize)
-			for (let i = currentIdx; i < end; i++) {
-				if (!loadedImages[i]) {
-					const img = new window.Image()
-					img.src = ROBOT_FRAMES[i].src
-					loadedImages[i] = img
-				}
-			}
-			currentIdx = end
-			if (currentIdx < ROBOT_TOTAL_FRAMES) {
-				if ("requestIdleCallback" in window) {
-					;(window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(loadNextBatch)
-				} else {
-					setTimeout(loadNextBatch, 150)
-				}
-			}
-		}
-
-		if ("requestIdleCallback" in window) {
-			;(window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(loadNextBatch)
-		} else {
-			setTimeout(loadNextBatch, 200)
-		}
-	}
-
-	const trigger = () => {
-		window.removeEventListener("pointermove", trigger)
-		startPreload()
-	}
-
-	window.addEventListener("pointermove", trigger, { passive: true, once: true })
-}
-
 export default function RoboOlhando({
 	size,
 	className = "",
@@ -168,9 +116,8 @@ export default function RoboOlhando({
 	useEffect(() => {
 		if (typeof window === "undefined" || !interactive || isMobile) return
 
-		// Garante que o frame central esteja carregado e inicia o pré-carregamento completo no desktop
+		// Garante que o frame central esteja carregado sob demanda
 		const centerImg = getOrLoadFrame(ROBOT_CENTER_FRAME)
-		scheduleBackgroundPreload()
 
 		const drawFrame = (frameIndex: number) => {
 			const canvas = canvasRef.current
