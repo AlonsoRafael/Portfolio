@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import {
 	ROBOT_CENTER_FRAME,
@@ -72,14 +72,9 @@ function getOrLoadFrame(index: number): HTMLImageElement | null {
 	return loadedImages[safeIndex]
 }
 
-// Pré-carrega frames em lotes somente em desktops com mouse ativo e em estado ocioso
+// Pré-carrega todos os frames em lotes no Desktop para animação 100% fluida e sem lag
 function scheduleBackgroundPreload() {
 	if (typeof window === "undefined" || isPreloadStarted) return
-	
-	// No mobile ou dispositivos de toque, evitamos baixar centenas de frames em segundo plano
-	const isFinePointer = window.matchMedia("(pointer: fine)").matches
-	if (!isFinePointer) return
-
 	isPreloadStarted = true
 	initImagesArray()
 
@@ -88,7 +83,7 @@ function scheduleBackgroundPreload() {
 
 	const startPreload = () => {
 		let currentIdx = 0
-		const batchSize = 12
+		const batchSize = 16
 
 		function loadNextBatch() {
 			const end = Math.min(ROBOT_TOTAL_FRAMES, currentIdx + batchSize)
@@ -104,7 +99,7 @@ function scheduleBackgroundPreload() {
 				if ("requestIdleCallback" in window) {
 					;(window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(loadNextBatch)
 				} else {
-					setTimeout(loadNextBatch, 80)
+					setTimeout(loadNextBatch, 30)
 				}
 			}
 		}
@@ -112,16 +107,25 @@ function scheduleBackgroundPreload() {
 		if ("requestIdleCallback" in window) {
 			;(window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(loadNextBatch)
 		} else {
-			setTimeout(loadNextBatch, 200)
+			setTimeout(loadNextBatch, 100)
 		}
 	}
 
 	const trigger = () => {
 		window.removeEventListener("pointermove", trigger)
+		window.removeEventListener("scroll", trigger)
 		startPreload()
 	}
 
-	window.addEventListener("pointermove", trigger, { passive: true, once: true })
+	window.addEventListener("pointermove", trigger, { passive: true })
+	window.addEventListener("scroll", trigger, { passive: true })
+
+	// Fallback para pré-carregar caso o usuário não interaja de imediato no desktop
+	if (document.readyState === "complete") {
+		setTimeout(startPreload, 1500)
+	} else {
+		window.addEventListener("load", () => setTimeout(startPreload, 1500), { once: true })
+	}
 }
 
 export default function RoboOlhando({
@@ -132,10 +136,21 @@ export default function RoboOlhando({
 }: RoboOlhandoProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 	const containerRef = useRef<HTMLDivElement>(null)
+	const [isMobile, setIsMobile] = useState<boolean>(false)
 
 	const aspectRatio = ROBOT_FRAME_HEIGHT / ROBOT_FRAME_WIDTH
 	const defaultWidth = size || 56
 	const defaultHeight = Math.round(defaultWidth * aspectRatio)
+
+	useEffect(() => {
+		const checkMobile = () => {
+			const mobile = window.innerWidth < 640 || window.matchMedia("(pointer: coarse)").matches
+			setIsMobile(mobile)
+		}
+		checkMobile()
+		window.addEventListener("resize", checkMobile)
+		return () => window.removeEventListener("resize", checkMobile)
+	}, [])
 
 	const mousePosRef = useRef<{ x: number; y: number; active: boolean }>({
 		x: 0,
@@ -150,9 +165,9 @@ export default function RoboOlhando({
 	const isLoopRunningRef = useRef<boolean>(false)
 
 	useEffect(() => {
-		if (typeof window === "undefined" || !interactive) return
+		if (typeof window === "undefined" || !interactive || isMobile) return
 
-		// Garante que o frame central esteja carregado e inicia o pré-carregamento completo
+		// Garante que o frame central esteja carregado e inicia o pré-carregamento completo no desktop
 		const centerImg = getOrLoadFrame(ROBOT_CENTER_FRAME)
 		scheduleBackgroundPreload()
 
@@ -296,7 +311,7 @@ export default function RoboOlhando({
 		}
 	}, [interactive, defaultWidth, defaultHeight, aspectRatio])
 
-	if (!interactive) {
+	if (!interactive || isMobile) {
 		return (
 			<div
 				ref={containerRef}
