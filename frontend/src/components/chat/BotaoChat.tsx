@@ -1,8 +1,17 @@
 "use client"
 
+import dynamic from "next/dynamic"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
-import JanelaChat from "./janelaChat"
 import RoboOlhando from "./RoboOlhando"
+
+const JanelaChat = dynamic(() => import("./janelaChat"), {
+	loading: () => (
+		<div className="flex items-center justify-center h-[360px] bg-zinc-900/90 rounded-2xl text-white">
+			<span className="text-xs text-zinc-400">Carregando AlonsoBot...</span>
+		</div>
+	),
+	ssr: false,
+})
 
 export default function BotaoChat() {
 	return (

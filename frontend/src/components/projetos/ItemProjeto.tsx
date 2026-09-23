@@ -71,8 +71,8 @@ export default function ItemProjeto({ projeto, className = "", priority = false 
 						src={imagemCapa}
 						alt={`Demonstração do projeto ${projeto.nome}`}
 						fill
-						sizes="(max-width: 640px) 95vw, (max-width: 1024px) 50vw, 33vw"
-						quality={90}
+						sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
+						quality={75}
 						priority={priority}
 						className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
 					/>

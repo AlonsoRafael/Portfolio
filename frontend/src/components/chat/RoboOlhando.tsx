@@ -72,9 +72,14 @@ function getOrLoadFrame(index: number): HTMLImageElement | null {
 	return loadedImages[safeIndex]
 }
 
-// Pré-carrega todos os frames em lotes para animação 100% fluida e sem lag
+// Pré-carrega frames em lotes somente em desktops com mouse ativo e em estado ocioso
 function scheduleBackgroundPreload() {
 	if (typeof window === "undefined" || isPreloadStarted) return
+	
+	// No mobile ou dispositivos de toque, evitamos baixar centenas de frames em segundo plano
+	const isFinePointer = window.matchMedia("(pointer: fine)").matches
+	if (!isFinePointer) return
+
 	isPreloadStarted = true
 	initImagesArray()
 
@@ -83,7 +88,7 @@ function scheduleBackgroundPreload() {
 
 	const startPreload = () => {
 		let currentIdx = 0
-		const batchSize = 16
+		const batchSize = 12
 
 		function loadNextBatch() {
 			const end = Math.min(ROBOT_TOTAL_FRAMES, currentIdx + batchSize)
@@ -99,7 +104,7 @@ function scheduleBackgroundPreload() {
 				if ("requestIdleCallback" in window) {
 					;(window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(loadNextBatch)
 				} else {
-					setTimeout(loadNextBatch, 30)
+					setTimeout(loadNextBatch, 80)
 				}
 			}
 		}
@@ -107,27 +112,16 @@ function scheduleBackgroundPreload() {
 		if ("requestIdleCallback" in window) {
 			;(window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(loadNextBatch)
 		} else {
-			setTimeout(loadNextBatch, 100)
+			setTimeout(loadNextBatch, 200)
 		}
 	}
 
 	const trigger = () => {
 		window.removeEventListener("pointermove", trigger)
-		window.removeEventListener("scroll", trigger)
-		window.removeEventListener("touchstart", trigger)
 		startPreload()
 	}
 
-	window.addEventListener("pointermove", trigger, { passive: true })
-	window.addEventListener("scroll", trigger, { passive: true })
-	window.addEventListener("touchstart", trigger, { passive: true })
-
-	// Fallback para pré-carregar caso o usuário não interaja de imediato
-	if (document.readyState === "complete") {
-		setTimeout(startPreload, 2000)
-	} else {
-		window.addEventListener("load", () => setTimeout(startPreload, 2000), { once: true })
-	}
+	window.addEventListener("pointermove", trigger, { passive: true, once: true })
 }
 
 export default function RoboOlhando({
