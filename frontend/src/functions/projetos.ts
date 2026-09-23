@@ -1,17 +1,32 @@
 import { Projeto } from "@core";
 import { httpGet } from "./api";
 
-export async function obterProjetos() {
-    const projetos: Projeto[] = await httpGet("/projetos");
+export async function obterProjetos(): Promise<{ todos: Projeto[]; destaques: Projeto[] }> {
+    const projetos: Projeto[] = await httpGet("/projetos", 3600);
 
-    const destaques = projetos.filter((projeto) => projeto.destaque === true);
+    // Garante que todas as tecnologias estejam preenchidas com cache de 1 hora
+    const todosCompletos: Projeto[] = await Promise.all(
+        (projetos || []).map(async (projeto) => {
+            if (projeto.tecnologias && Array.isArray(projeto.tecnologias) && projeto.tecnologias.length > 0) {
+                return projeto;
+            }
+            try {
+                const completo = await obterProjeto(String(projeto.id));
+                return completo ?? projeto;
+            } catch {
+                return projeto;
+            }
+        })
+    );
 
-  return {
-    todos: projetos,
-    destaques,
-  };
+    const destaques = todosCompletos.filter((projeto) => projeto.destaque === true);
+
+    return {
+        todos: todosCompletos,
+        destaques,
+    };
 }
 
 export async function obterProjeto(id: string): Promise<Projeto | null> {
-    return await httpGet(`/projetos/${id}`);
+    return await httpGet(`/projetos/${id}`, 3600);
 }

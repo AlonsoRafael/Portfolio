@@ -5,19 +5,23 @@ import Container from "@/components/shared/Container"
 import { obterProjetos } from "@/functions/projetos"
 import { obterTecnologias } from "@/functions/tecnologias"
 
+export const revalidate = 3600
+
 export default async function Home() {
 	const tecnologias = await obterTecnologias()
 	const projetos = await obterProjetos()
 
 	return (
-		<div>
+		<main className="w-full min-h-screen overflow-x-hidden">
 			<Principal tecnologias={tecnologias.destaques} />
-			<Container className="py-16">
-				<Curriculo tecnologias={tecnologias.todas} />
+			<Container className="py-12 sm:py-16">
+				<Curriculo />
 			</Container>
-			<Container className="py-16 flex flex-col items-center gap-10">
+			<Container className="py-12 sm:py-16 flex flex-col w-full">
 				<Projetos titulo="Projetos" lista={projetos.todos} />
 			</Container>
-		</div>
+		</main>
 	)
 }
+
+

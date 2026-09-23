@@ -1,12 +1,7 @@
 import Link from "next/link"
-import { Tecnologia } from "@core"
 import { IconExternalLink } from "@tabler/icons-react"
 
-export interface CurriculoProps {
-	tecnologias: Tecnologia[]
-}
-
-export default function Curriculo(props: CurriculoProps) {
+export default function Curriculo() {
 	return (
 		<section
 			className="
@@ -15,7 +10,7 @@ export default function Curriculo(props: CurriculoProps) {
    				hover:border-white
   				"
 		>
-			<h3 className="text-2xl font-bold text-white/70">Sobre</h3>
+			<h2 className="text-2xl font-bold text-white/70">Sobre</h2>
 
 			<p className="mt-5 max-w-6xl leading-relaxed text-zinc-300 text-sm sm:text-base">
 				Especialista em desenvolvimento de sistemas escaláveis, com foco em arquiteturas
@@ -29,7 +24,7 @@ export default function Curriculo(props: CurriculoProps) {
 
 			<Link
 				href="/experiencia"
-				className="mt-8 inline-flex items-center gap-2 text-sm sm:text-base font-semibold text-blue-900 underline decoration-zinc-700 underline-offset-4 hover:text-blue-400"
+				className="mt-8 inline-flex items-center gap-2 text-sm sm:text-base font-semibold text-blue-400 underline decoration-zinc-600 underline-offset-4 hover:text-blue-300"
 			>
 				<span>Experiências</span>
 				<IconExternalLink size={18} stroke={2} />

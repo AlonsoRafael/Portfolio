@@ -1,9 +1,8 @@
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export async function httpGet(url: string) {
+export async function httpGet(url: string, revalidate: number = 60) {
     const response = await fetch(normalizarUrl(`${baseURL}/${url}`), {
-        cache: "no-store",
-        next: { revalidate: 0 },
+        next: { revalidate },
     });
 
     if (!response.ok) {

@@ -25,23 +25,43 @@ export default function JanelaChat() {
 	}, [mensagens])
 
 	return (
-		<div className="flex flex-col bg-zinc-300 rounded-2xl text-black overflow-hidden">
-			<div className="flex justify-between items-center bg-white p-4">
-				<h2 className="text-2xl font-bold">Olá Visitante!</h2>
-				<IconReload
-					size={24}
-					className="text-black cursor-pointer"
+		<div className="flex flex-col bg-zinc-200 rounded-2xl text-black overflow-hidden shadow-2xl border border-zinc-300">
+			<div className="flex justify-between items-center bg-white px-4 py-3 border-b border-zinc-200">
+				<div className="flex items-center gap-2.5">
+					<div className="relative">
+						<Image
+							src="/robot/frames/frame_315.webp"
+							alt="AlonsoBot"
+							width={36}
+							height={36}
+							className="object-contain"
+						/>
+						<span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white" />
+					</div>
+					<div>
+						<h2 className="text-base font-bold leading-tight">AlonsoBot</h2>
+						<span className="text-xs text-emerald-600 font-medium">Online</span>
+					</div>
+				</div>
+				<button
+					type="button"
 					onClick={limparMensagens}
-				/>
+					title="Reiniciar conversa"
+					className="p-1.5 hover:bg-zinc-100 rounded-full transition-colors cursor-pointer"
+				>
+					<IconReload
+						size={20}
+						className="text-zinc-600 hover:rotate-180 transition-transform duration-300"
+					/>
+				</button>
 			</div>
 			{mensagens.length === 0 ? (
-				<div className="flex flex-col justify-center items-center min-h-[400] sm:min-[500]">
-					<IconMessages
-						size={120}
-						stroke={0.2}
-						className="text-black/30 sm:w-[180] sm:h-[180]"
-					/>
-					<span>Vamos Conversar?</span>
+				<div className="flex flex-col justify-center items-center py-12 px-4 gap-3 min-h-[320px]">
+					<IconMessages size={90} stroke={1} className="text-zinc-400" />
+					<span className="text-lg font-semibold text-zinc-800">Vamos Conversar?</span>
+					<span className="text-xs text-zinc-500 text-center max-w-[260px]">
+						Tire dúvidas sobre projetos, stacks, formação e experiências.
+					</span>
 				</div>
 			) : (
 				<div className="flex flex-col p-2 gap-2 h-[45vh] min-h-[260] sm:h-[360] sm:max-h-[400] overflow-y-scroll">
@@ -65,8 +85,10 @@ export default function JanelaChat() {
 			<div className="flex items-center gap-2 p-1 m-4 rounded-full h-10 bg-white">
 				<input
 					type="text"
+					aria-label="Digite sua mensagem para o chat"
+					placeholder="Digite sua mensagem..."
 					value={texto}
-					className="flex-1 bg-transparent h-8 outline-none pl-3"
+					className="flex-1 bg-transparent h-8 outline-none pl-3 text-sm text-zinc-800 placeholder:text-zinc-400"
 					onChange={(e: ChangeEvent<HTMLInputElement>) => {
 						setTexto(e.target.value)
 					}}
@@ -77,7 +99,9 @@ export default function JanelaChat() {
 					}}
 				/>
 				<button
-					className="flex justify-center items-center min-h-8 min-w-8 rounded-full bg-blue-900"
+					type="button"
+					aria-label="Enviar mensagem"
+					className="flex justify-center items-center min-h-8 min-w-8 rounded-full bg-blue-900 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
 					onClick={enviarMensagem}
 					disabled={!texto.trim()}
 				>

@@ -1,169 +1,64 @@
+import type { Metadata } from "next"
 import Cabecalho from "@/components/shared/Cabecalho"
 import Container from "@/components/shared/Container"
-import { obterProjeto, obterProjetos } from "@/functions/projetos"
-import Image from "next/image"
-import Link from "next/link"
+import { obterProjetos } from "@/functions/projetos"
+import AsciiCursorBackground from "@/components/projetos/AsciiCursorBackground"
+import NeuralBackground from "@/components/landing/NeuralBackground"
+import ItemProjeto from "@/components/projetos/ItemProjeto"
 
-export const revalidate = 21600
+export const revalidate = 60
 
-function tipoVisual(tipo: string) {
-	const normalizado = (tipo || "").toLowerCase()
-
-	if (normalizado.includes("backend")) {
-		return {
-			dot: "bg-emerald-400",
-			badge: "border-emerald-500/40 text-emerald-200 bg-emerald-500/10",
-		}
-	}
-
-	if (normalizado.includes("frontend")) {
-		return {
-			dot: "bg-amber-400",
-			badge: "border-amber-500/40 text-amber-200 bg-amber-500/10",
-		}
-	}
-
-	if (normalizado.includes("full")) {
-		return {
-			dot: "bg-fuchsia-400",
-			badge: "border-fuchsia-500/40 text-fuchsia-200 bg-fuchsia-500/10",
-		}
-	}
-
-	if (normalizado.includes("mobile")) {
-		return {
-			dot: "bg-sky-400",
-			badge: "border-sky-500/40 text-sky-200 bg-sky-500/10",
-		}
-	}
-
-	return {
-		dot: "bg-zinc-400",
-		badge: "border-zinc-500/40 text-zinc-200 bg-zinc-500/10",
-	}
-}
-
-function nivelTexto(nivel: string | number) {
-	const mapa: Record<string, string> = {
-		"1": "Iniciante",
-		"2": "Intermediario",
-		"3": "Avancado",
-		"4": "Expert",
-	}
-
-	return mapa[String(nivel)] ?? "Nao informado"
+export const metadata: Metadata = {
+	title: "Projetos | Rafael Alonso - Software Developer",
+	description:
+		"Conheça os projetos desenvolvidos por Rafael Alonso, incluindo aplicações Full Stack, arquiteturas Back-end e interfaces Front-end modernas.",
+	alternates: {
+		canonical: "/projeto",
+	},
 }
 
 export default async function PaginaProjetos() {
 	const projetosBase = await obterProjetos()
-
-	const detalhes = await Promise.all(
-		projetosBase.todos.map(async (projeto) => {
-			const completo = await obterProjeto(String(projeto.id))
-			return completo ?? projeto
-		}),
-	)
-
-	const lista = [...detalhes].sort((a, b) => {
+	const lista = [...(projetosBase?.todos ?? [])].sort((a, b) => {
 		if (a.destaque !== b.destaque) return a.destaque ? -1 : 1
 		return a.nome.localeCompare(b.nome)
 	})
 
 	return (
-		<div className="min-h-screen bg-black text-zinc-100">
-			<div className="relative h-16 overflow-hidden">
-				<div className="absolute inset-x-0 top-0 h-[500] hero-bg" />
+		<div className="relative min-h-screen bg-black text-zinc-100 selection:bg-zinc-800 selection:text-white">
+			{/* Fundo Interativo com Grid e Cursor Binário */}
+			<AsciiCursorBackground />
+
+			{/* Top bar com fundo de rede neural */}
+			<div className="relative z-20 h-16 overflow-hidden bg-[#020617] border-b border-zinc-800/80">
+				<NeuralBackground />
 				<div className="relative z-10">
 					<Cabecalho />
 				</div>
 			</div>
 
-			<Container className="py-8 md:py-10">
-				<h1 className="text-3xl md:text-3xl font-bold">Projetos</h1>
-				<p className="text-zinc-400 mt-2">{lista.length} projetos organizados por tipo</p>
-			</Container>
+			<main className="relative z-10">
+				<Container className="py-8 md:py-12">
+					<div className="flex flex-col gap-2">
+						<div className="flex flex-wrap items-baseline justify-between gap-4">
+							<h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
+								Projetos
+							</h1>
+							<span className="text-zinc-400 font-mono text-sm px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800">
+								{lista.length} projetos desenvolvidos
+							</span>
+						</div>
+					</div>
+				</Container>
 
-			<Container className="py-8 md:py-10">
-				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-5 items-stretch">
-					{lista.map((projeto) => {
-						const visual = tipoVisual(projeto.tipo)
-						const tecnologias = projeto.tecnologias ?? []
-
-						return (
-							<article
-								key={projeto.id}
-								className="h-full rounded-xl border border-zinc-800 bg-zinc-950/80 p-5 flex flex-col gap-4 transition-all duration-200 hover:border-white hover:bg-zinc-950"
-							>
-								<div className="flex items-start justify-between gap-3 min-w-0">
-									<h2 className="min-w-0 flex-1 text-[20px] leading-[1.05] font-extrabold tracking-tight text-white wrap-break-word">
-										{projeto.nome}
-									</h2>
-									{projeto.destaque && (
-										<span className="shrink-0 rounded-full border border-cyan-500/40 bg-cyan-500/10 px-2.5 py-1 text-[11px] font-semibold text-cyan-200">
-											Destaque
-										</span>
-									)}
-								</div>
-
-								<div
-									className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-sm ${visual.badge}`}
-								>
-									<span className={`h-2 w-2 rounded-full ${visual.dot}`} />
-									{projeto.tipo}
-								</div>
-
-								<div className="rounded-lg border border-zinc-800 bg-zinc-900/40 p-3">
-									{tecnologias.length > 0 ? (
-										<div className="grid grid-cols-4 gap-2">
-											{tecnologias.slice(0, 8).map((tech) => (
-												<div
-													key={tech.id}
-													title={tech.nome}
-													className="rounded-md border border-zinc-700/80 bg-black/40 p-2 flex items-center justify-center"
-												>
-													<span className="relative block h-8 w-8">
-														<Image
-															src={tech.imagem}
-															alt={tech.nome}
-															fill
-															className="object-contain"
-														/>
-													</span>
-												</div>
-											))}
-										</div>
-									) : (
-										<p className="text-xs text-zinc-500">
-											Sem tecnologias vinculadas
-										</p>
-									)}
-								</div>
-
-								<p className="text-zinc-300 leading-7 line-clamp-4 min-h-[112]">
-									{projeto.descricao}
-								</p>
-
-								<div className="mt-auto pt-1 flex flex-col gap-1">
-									<div className="text-xs text-zinc-400">
-										{tecnologias.length} tecnologias
-									</div>
-
-									<div className="mt-auto pt-1 flex items-center gap-4 text-base font-semibold">
-										<Link
-											href={projeto.repositorio}
-											target="_blank"
-											rel="noopener noreferrer"
-											className="text-white hover:text-blue-900 transition-colors"
-										>
-											Github ↗
-										</Link>
-									</div>
-								</div>
-							</article>
-						)
-					})}
-				</div>
-			</Container>
+				<Container className="pb-20 pt-2">
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 items-stretch">
+						{lista.map((projeto, index) => (
+							<ItemProjeto key={projeto.id} projeto={projeto} priority={index < 3} />
+						))}
+					</div>
+				</Container>
+			</main>
 		</div>
 	)
 }

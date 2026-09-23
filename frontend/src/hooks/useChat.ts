@@ -24,17 +24,27 @@ export default function useChat() {
         setMensagens((msgs) => [...msgs, novaMensagem])
 
         const resposta = await conversar(chatId, novaMensagem)
-        if (!resposta)  return
+        const textoResposta =
+            resposta ||
+            "Ops! O AlonsoBot gastou todos os neurônios (créditos) por hoje. Por favor, tente falar diretamente com o Rafael Alonso no [LinkedIn](https://www.linkedin.com/in/rafael-alonso-5b5099207/) enquanto eu recarrego as energias!"
 
         const mensagemResposta: Mensagem = {
             id: Id.gerar(),
-            texto: resposta,
-            autor: "ChatBot",
+            texto: textoResposta,
+            autor: "AlonsoBot",
             lado: "esquerdo",
         }
 
-       setMensagens((msgs) => [...msgs, mensagemResposta])
-    }finally {
+        setMensagens((msgs) => [...msgs, mensagemResposta])
+    } catch {
+        const mensagemErro: Mensagem = {
+            id: Id.gerar(),
+            texto: "Ops! O AlonsoBot gastou todos os neurônios (créditos) por hoje. Por favor, tente falar diretamente com o Rafael Alonso no [LinkedIn](https://www.linkedin.com/in/rafael-alonso-5b5099207/) enquanto eu recarrego as energias!",
+            autor: "AlonsoBot",
+            lado: "esquerdo",
+        }
+        setMensagens((msgs) => [...msgs, mensagemErro])
+    } finally {
         setPensando(false)
     }
     }
