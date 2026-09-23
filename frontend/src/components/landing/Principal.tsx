@@ -14,16 +14,28 @@ export default function Principal(props: PrincipalProps) {
 	const containerRef = useRef<HTMLDivElement>(null)
 	const itemRefs = useRef<(HTMLSpanElement | null)[]>([])
 
-	const [targetPos, setTargetPos] = useState({ x: 0, y: 0, isHovered: false })
+	const [isHovered, setIsHovered] = useState(false)
+	const [isDesktop, setIsDesktop] = useState(false)
 
 	const tecnologiasList = props.tecnologias || []
-	const [trailPositions, setTrailPositions] = useState<Array<{ x: number; y: number }>>([])
+	const flyingRefs = useRef<(HTMLDivElement | null)[]>([])
 	const trailPositionsRef = useRef<Array<{ x: number; y: number }>>([])
 	const originsRef = useRef<Array<{ x: number; y: number }>>([])
+	const targetPosRef = useRef<{ x: number; y: number; isHovered: boolean }>({ x: 0, y: 0, isHovered: false })
 	const animationFrameRef = useRef<number | null>(null)
 	const isAnimatingRef = useRef<boolean>(false)
 
-	// Captura as coordenadas de repouso na grade de cada tecnologia apenas sob demanda
+	useEffect(() => {
+		const checkDesktop = () => {
+			const fine = window.innerWidth >= 768 && window.matchMedia("(pointer: fine)").matches
+			setIsDesktop(fine)
+		}
+		checkDesktop()
+		window.addEventListener("resize", checkDesktop)
+		return () => window.removeEventListener("resize", checkDesktop)
+	}, [])
+
+	// Captura as coordenadas de repouso na grade de cada tecnologia
 	const updateOrigins = useCallback(() => {
 		if (!containerRef.current) return
 		const containerRect = containerRef.current.getBoundingClientRect()
@@ -39,62 +51,62 @@ export default function Principal(props: PrincipalProps) {
 		if (origins.length > 0) {
 			originsRef.current = origins
 			if (trailPositionsRef.current.length === 0) {
-				trailPositionsRef.current = origins
-				setTrailPositions(origins)
+				trailPositionsRef.current = origins.map((p) => ({ ...p }))
 			}
 		}
 	}, [])
 
-	// Loop de física suave dos ícones apenas quando ativo
+	// Loop de física ultra fluido a 60 FPS com manipulação direta de transform na GPU (sem React re-render)
 	const startAnimationLoop = useCallback(() => {
 		if (isAnimatingRef.current) return
 		isAnimatingRef.current = true
 
 		const updatePosition = () => {
 			const origins = originsRef.current
-			if (trailPositionsRef.current.length > 0 && origins.length > 0) {
-				const updated = [...trailPositionsRef.current]
+			const currentTrail = trailPositionsRef.current
+			const target = targetPosRef.current
+
+			if (currentTrail.length > 0 && origins.length > 0) {
 				let maxDelta = 0
 
-				for (let i = 0; i < updated.length; i++) {
+				for (let i = 0; i < currentTrail.length; i++) {
 					let destinationX: number
 					let destinationY: number
 
-					if (targetPos.isHovered) {
-						// Voo em direção ao mouse em fila indiana
-						destinationX = i === 0 ? targetPos.x : updated[i - 1].x
-						destinationY = i === 0 ? targetPos.y : updated[i - 1].y
+					if (target.isHovered) {
+						destinationX = i === 0 ? target.x : currentTrail[i - 1].x
+						destinationY = i === 0 ? target.y : currentTrail[i - 1].y
 					} else {
-						// Retorno suave para a respectiva vaga na grade
 						const origin = origins[i] || { x: 0, y: 0 }
 						destinationX = origin.x
 						destinationY = origin.y
 					}
 
-					// Fator de fluidez para os ícones
-					const factor = targetPos.isHovered
-						? Math.max(0.04, 0.08 - i * 0.005)
-						: 0.12 // Retorno suave para a grade
+					const factor = target.isHovered
+						? Math.max(0.06, 0.12 - i * 0.006)
+						: 0.16
 
-					const dx = (destinationX - updated[i].x) * factor
-					const dy = (destinationY - updated[i].y) * factor
+					const dx = (destinationX - currentTrail[i].x) * factor
+					const dy = (destinationY - currentTrail[i].y) * factor
 
-					updated[i] = {
-						x: updated[i].x + dx,
-						y: updated[i].y + dy,
-					}
+					currentTrail[i].x += dx
+					currentTrail[i].y += dy
 
-					const dist = Math.abs(destinationX - updated[i].x) + Math.abs(destinationY - updated[i].y)
+					const dist = Math.abs(dx) + Math.abs(dy)
 					if (dist > maxDelta) maxDelta = dist
+
+					// Atualiza o elemento diretamente no DOM acelerado por GPU
+					const el = flyingRefs.current[i]
+					if (el) {
+						const trailScale = Math.max(0.92, 1 - i * 0.012)
+						const trailOpacity = Math.max(0.75, 1 - i * 0.035)
+						el.style.transform = `translate3d(${currentTrail[i].x}px, ${currentTrail[i].y}px, 0) translate(-50%, -50%) scale(${trailScale})`
+						el.style.opacity = `${trailOpacity}`
+					}
 				}
 
-				trailPositionsRef.current = updated
-				setTrailPositions(updated)
-
-				// Para o loop de animação quando os ícones já retornaram ao repouso
-				if (!targetPos.isHovered && maxDelta < 0.2) {
-					trailPositionsRef.current = origins
-					setTrailPositions(origins)
+				// Para o loop quando retornar totalmente à vaga
+				if (!target.isHovered && maxDelta < 0.15) {
 					isAnimatingRef.current = false
 					animationFrameRef.current = null
 					return
@@ -105,12 +117,43 @@ export default function Principal(props: PrincipalProps) {
 		}
 
 		animationFrameRef.current = requestAnimationFrame(updatePosition)
-	}, [targetPos])
+	}, [])
+
+	const handleMouseMove = useCallback(
+		(e: React.MouseEvent<HTMLDivElement>) => {
+			if (!isDesktop || !containerRef.current) return
+			if (originsRef.current.length === 0) {
+				updateOrigins()
+			}
+			const rect = containerRef.current.getBoundingClientRect()
+			const clientX = e.clientX - rect.left
+			const clientY = e.clientY - rect.top
+
+			const clampedY = Math.min(Math.max(92, clientY), rect.height - 30)
+			const clampedX = Math.min(Math.max(30, clientX), rect.width - 30)
+
+			targetPosRef.current = {
+				x: clampedX,
+				y: clampedY,
+				isHovered: true,
+			}
+
+			if (!isHovered) {
+				setIsHovered(true)
+			}
+
+			startAnimationLoop()
+		},
+		[isDesktop, isHovered, updateOrigins, startAnimationLoop]
+	)
+
+	const handleMouseLeave = useCallback(() => {
+		if (!isDesktop) return
+		targetPosRef.current.isHovered = false
+		setIsHovered(false)
+	}, [isDesktop])
 
 	useEffect(() => {
-		if (targetPos.isHovered) {
-			startAnimationLoop()
-		}
 		return () => {
 			if (animationFrameRef.current) {
 				cancelAnimationFrame(animationFrameRef.current)
@@ -118,33 +161,6 @@ export default function Principal(props: PrincipalProps) {
 				isAnimatingRef.current = false
 			}
 		}
-	}, [targetPos.isHovered, startAnimationLoop])
-
-	const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-		if (!containerRef.current) return
-		if (originsRef.current.length === 0) {
-			updateOrigins()
-		}
-		const rect = containerRef.current.getBoundingClientRect()
-		const clientX = e.clientX - rect.left
-		const clientY = e.clientY - rect.top
-
-		// Mantém os ícones seguindo o mouse no eixo X, travando a altura Y logo abaixo da top bar
-		const clampedY = Math.min(Math.max(92, clientY), rect.height - 30)
-		const clampedX = Math.min(Math.max(30, clientX), rect.width - 30)
-
-		setTargetPos({
-			x: clampedX,
-			y: clampedY,
-			isHovered: true,
-		})
-	}, [updateOrigins])
-
-	const handleMouseLeave = useCallback(() => {
-		setTargetPos((prev) => ({
-			...prev,
-			isHovered: false,
-		}))
 	}, [])
 
 	return (
@@ -157,39 +173,34 @@ export default function Principal(props: PrincipalProps) {
 			{/* Fundo Canvas 2D Interativo de Rede Neural */}
 			<NeuralBackground />
 
-			{/* Ícones das Tecnologias que voam da grade até o mouse (somente quando hovered) */}
-			{targetPos.isHovered &&
-				trailPositions.length > 0 &&
-				tecnologiasList.map((tecnologia, idx) => {
-					const pos = trailPositions[idx]
-					if (!pos) return null
-
-					const trailScale = Math.max(0.92, 1 - idx * 0.012)
-					const trailOpacity = Math.max(0.75, 1 - idx * 0.035)
-
-					return (
-						<div
-							key={tecnologia.id || idx}
-							className="absolute top-0 left-0 pointer-events-none z-30 will-change-transform"
-							style={{
-								transform: `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%) scale(${trailScale})`,
-								opacity: trailOpacity,
-							}}
-						>
-							<div className="relative h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 flex items-center justify-center bg-transparent">
-								<div className="relative w-full h-full">
-									<Image
-										src={tecnologia.imagem}
-										alt={tecnologia.nome}
-										fill
-										sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
-										className="object-contain drop-shadow-md"
-									/>
-								</div>
+			{/* Ícones das Tecnologias que voam da grade até o mouse (somente no desktop quando hovered) */}
+			{isDesktop &&
+				isHovered &&
+				tecnologiasList.map((tecnologia, idx) => (
+					<div
+						key={tecnologia.id || idx}
+						ref={(el) => {
+							flyingRefs.current[idx] = el
+						}}
+						className="absolute top-0 left-0 pointer-events-none z-30 will-change-transform"
+						style={{
+							transform: "translate3d(0, 0, 0) translate(-50%, -50%)",
+							opacity: 0,
+						}}
+					>
+						<div className="relative h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 flex items-center justify-center bg-transparent">
+							<div className="relative w-full h-full">
+								<Image
+									src={tecnologia.imagem}
+									alt={tecnologia.nome}
+									fill
+									sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
+									className="object-contain drop-shadow-md"
+								/>
 							</div>
 						</div>
-					)
-				})}
+					</div>
+				))}
 
 			{/* Conteúdo principal */}
 			<div className="relative z-10 w-full flex flex-col items-center justify-between flex-1 h-full">
@@ -250,7 +261,7 @@ export default function Principal(props: PrincipalProps) {
 										}}
 										className="relative h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-2xl flex items-center justify-center"
 									>
-										{(!targetPos.isHovered || trailPositions.length === 0) && (
+										{(!isDesktop || !isHovered) && (
 											<div className="relative w-full h-full">
 												<Image
 													src={tecnologia.imagem}
@@ -265,7 +276,7 @@ export default function Principal(props: PrincipalProps) {
 									</span>
 									<span
 										className={`text-[10px] sm:text-xs text-zinc-300 text-center whitespace-nowrap transition-all duration-300 ${
-											targetPos.isHovered ? "opacity-0 -translate-y-1" : "opacity-100 translate-y-0"
+											isDesktop && isHovered ? "opacity-0 -translate-y-1" : "opacity-100 translate-y-0"
 										}`}
 									>
 										{tecnologia.nome}

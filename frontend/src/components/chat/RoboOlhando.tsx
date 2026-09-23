@@ -72,6 +72,54 @@ function getOrLoadFrame(index: number): HTMLImageElement | null {
 	return loadedImages[safeIndex]
 }
 
+// Pré-carrega frames no Desktop de forma ociosa somente em telas grandes com mouse
+function scheduleBackgroundPreload() {
+	if (typeof window === "undefined" || isPreloadStarted) return
+	
+	// Bloqueio rigoroso: nunca executa em mobile ou touch
+	const isMobileOrTouch = window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches || !window.matchMedia("(pointer: fine)").matches
+	if (isMobileOrTouch) return
+
+	isPreloadStarted = true
+	initImagesArray()
+
+	// Carrega primeiro o frame central
+	getOrLoadFrame(ROBOT_CENTER_FRAME)
+
+	const startPreload = () => {
+		let currentIdx = 0
+		const batchSize = 12
+
+		function loadNextBatch() {
+			const end = Math.min(ROBOT_TOTAL_FRAMES, currentIdx + batchSize)
+			for (let i = currentIdx; i < end; i++) {
+				if (!loadedImages[i]) {
+					const img = new window.Image()
+					img.src = ROBOT_FRAMES[i].src
+					loadedImages[i] = img
+				}
+			}
+			currentIdx = end
+			if (currentIdx < ROBOT_TOTAL_FRAMES) {
+				if ("requestIdleCallback" in window) {
+					;(window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(loadNextBatch)
+				} else {
+					setTimeout(loadNextBatch, 50)
+				}
+			}
+		}
+
+		if ("requestIdleCallback" in window) {
+			;(window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(loadNextBatch)
+		} else {
+			setTimeout(loadNextBatch, 80)
+		}
+	}
+
+	// No desktop, inicia em background suavemente quando o mouse for movido
+	window.addEventListener("pointermove", startPreload, { passive: true, once: true })
+}
+
 export default function RoboOlhando({
 	size,
 	className = "",
@@ -80,25 +128,20 @@ export default function RoboOlhando({
 }: RoboOlhandoProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 	const containerRef = useRef<HTMLDivElement>(null)
-	const [isMobile, setIsMobile] = useState<boolean>(() => {
-		if (typeof window !== "undefined") {
-			return window.innerWidth < 640 || window.matchMedia("(pointer: coarse)").matches
-		}
-		return false
-	})
+	const [isDesktop, setIsDesktop] = useState<boolean>(false)
 
 	const aspectRatio = ROBOT_FRAME_HEIGHT / ROBOT_FRAME_WIDTH
 	const defaultWidth = size || 56
 	const defaultHeight = Math.round(defaultWidth * aspectRatio)
 
 	useEffect(() => {
-		const checkMobile = () => {
-			const mobile = window.innerWidth < 640 || window.matchMedia("(pointer: coarse)").matches
-			setIsMobile(mobile)
+		const checkPointer = () => {
+			const fine = window.innerWidth >= 768 && window.matchMedia("(pointer: fine)").matches
+			setIsDesktop(fine)
 		}
-		checkMobile()
-		window.addEventListener("resize", checkMobile)
-		return () => window.removeEventListener("resize", checkMobile)
+		checkPointer()
+		window.addEventListener("resize", checkPointer)
+		return () => window.removeEventListener("resize", checkPointer)
 	}, [])
 
 	const mousePosRef = useRef<{ x: number; y: number; active: boolean }>({
@@ -114,10 +157,11 @@ export default function RoboOlhando({
 	const isLoopRunningRef = useRef<boolean>(false)
 
 	useEffect(() => {
-		if (typeof window === "undefined" || !interactive || isMobile) return
+		if (typeof window === "undefined" || !interactive || !isDesktop) return
 
-		// Garante que o frame central esteja carregado sob demanda
+		// Garante que o frame central esteja carregado e inicia o pré-carregamento no desktop
 		const centerImg = getOrLoadFrame(ROBOT_CENTER_FRAME)
+		scheduleBackgroundPreload()
 
 		const drawFrame = (frameIndex: number) => {
 			const canvas = canvasRef.current
@@ -239,27 +283,17 @@ export default function RoboOlhando({
 			wakeUpLoop()
 		}
 
-		const handleTouchMove = (e: TouchEvent) => {
-			if (e.touches.length > 0) {
-				mousePosRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, active: true }
-				lastMoveTimeRef.current = performance.now()
-				wakeUpLoop()
-			}
-		}
-
 		window.addEventListener("mousemove", handleMouseMove, { passive: true })
-		window.addEventListener("touchmove", handleTouchMove, { passive: true })
 
 		return () => {
 			if (animFrameIdRef.current) {
 				cancelAnimationFrame(animFrameIdRef.current)
 			}
 			window.removeEventListener("mousemove", handleMouseMove)
-			window.removeEventListener("touchmove", handleTouchMove)
 		}
-	}, [interactive, defaultWidth, defaultHeight, aspectRatio])
+	}, [interactive, defaultWidth, defaultHeight, aspectRatio, isDesktop])
 
-	if (!interactive || isMobile) {
+	if (!interactive || !isDesktop) {
 		return (
 			<div
 				ref={containerRef}

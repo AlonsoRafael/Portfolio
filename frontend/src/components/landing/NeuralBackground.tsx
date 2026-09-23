@@ -206,12 +206,129 @@ export default function NeuralBackground() {
 
 	const particlesRef = useRef<NodeParticle[]>([])
 	const dataSpecksRef = useRef<DataSpeck[]>([])
+	const bgCanvasRef = useRef<HTMLCanvasElement | null>(null)
 	const animationFrameRef = useRef<number | null>(null)
 	const dimensionsRef = useRef<{ width: number; height: number; dpr: number }>({
 		width: 0,
 		height: 0,
 		dpr: 1,
 	})
+
+	const renderStaticBackdrop = useCallback((width: number, height: number) => {
+		if (width === 0 || height === 0) return
+		const offscreen = document.createElement("canvas")
+		offscreen.width = width
+		offscreen.height = height
+		const ctx = offscreen.getContext("2d")
+		if (!ctx) return
+
+		// 1. Fundo atmosférico base
+		const baseGrad = ctx.createLinearGradient(0, 0, width, height)
+		baseGrad.addColorStop(0, "#01071a")
+		baseGrad.addColorStop(0.5, "#011226")
+		baseGrad.addColorStop(1, "#021a36")
+		ctx.fillStyle = baseGrad
+		ctx.fillRect(0, 0, width, height)
+
+		const bottomUpAmbient = ctx.createLinearGradient(0, height, 0, height * 0.22)
+		bottomUpAmbient.addColorStop(0, "rgba(6, 50, 75, 0.28)")
+		bottomUpAmbient.addColorStop(0.5, "rgba(2, 25, 45, 0.1)")
+		bottomUpAmbient.addColorStop(1, "rgba(1, 7, 26, 0)")
+		ctx.fillStyle = bottomUpAmbient
+		ctx.fillRect(0, 0, width, height)
+
+		// 2. Luz Verde/Teal na base esquerda
+		const leftTealBeam = ctx.createRadialGradient(
+			width * 0.08,
+			height * 1.05,
+			30,
+			width * 0.15,
+			height * 0.7,
+			Math.max(width * 0.48, 380)
+		)
+		leftTealBeam.addColorStop(0, "rgba(18, 140, 160, 0.45)")
+		leftTealBeam.addColorStop(0.3, "rgba(12, 100, 120, 0.28)")
+		leftTealBeam.addColorStop(0.6, "rgba(6, 60, 80, 0.12)")
+		leftTealBeam.addColorStop(0.85, "rgba(2, 25, 45, 0.04)")
+		leftTealBeam.addColorStop(1, "rgba(1, 7, 26, 0)")
+		ctx.fillStyle = leftTealBeam
+		ctx.fillRect(0, 0, width, height)
+
+		const leftCoreGlow = ctx.createRadialGradient(
+			0,
+			height,
+			0,
+			width * 0.05,
+			height * 0.85,
+			Math.max(width * 0.26, 240)
+		)
+		leftCoreGlow.addColorStop(0, "rgba(35, 180, 165, 0.38)")
+		leftCoreGlow.addColorStop(0.4, "rgba(16, 115, 130, 0.18)")
+		leftCoreGlow.addColorStop(0.75, "rgba(8, 65, 80, 0.06)")
+		leftCoreGlow.addColorStop(1, "rgba(1, 7, 26, 0)")
+		ctx.fillStyle = leftCoreGlow
+		ctx.fillRect(0, 0, width, height)
+
+		const leftTopBlueGlow = ctx.createRadialGradient(
+			width * 0.08,
+			0,
+			10,
+			width * 0.14,
+			height * 0.2,
+			Math.max(width * 0.35, 260)
+		)
+		leftTopBlueGlow.addColorStop(0, "rgba(12, 50, 110, 0.25)")
+		leftTopBlueGlow.addColorStop(0.6, "rgba(4, 22, 60, 0.08)")
+		leftTopBlueGlow.addColorStop(1, "rgba(1, 7, 26, 0)")
+		ctx.fillStyle = leftTopBlueGlow
+		ctx.fillRect(0, 0, width, height)
+
+		// 3. Luz Azul na direita
+		const rightBlueBeam = ctx.createRadialGradient(
+			width * 0.92,
+			height * 0.92,
+			20,
+			width * 0.86,
+			height * 0.65,
+			Math.max(width * 0.45, 360)
+		)
+		rightBlueBeam.addColorStop(0, "rgba(14, 60, 130, 0.38)")
+		rightBlueBeam.addColorStop(0.4, "rgba(8, 38, 90, 0.2)")
+		rightBlueBeam.addColorStop(0.75, "rgba(3, 18, 55, 0.08)")
+		rightBlueBeam.addColorStop(1, "rgba(1, 7, 26, 0)")
+		ctx.fillStyle = rightBlueBeam
+		ctx.fillRect(0, 0, width, height)
+
+		const rightCoreGlow = ctx.createRadialGradient(
+			width,
+			height,
+			0,
+			width * 0.95,
+			height * 0.85,
+			Math.max(width * 0.25, 220)
+		)
+		rightCoreGlow.addColorStop(0, "rgba(20, 80, 160, 0.32)")
+		rightCoreGlow.addColorStop(0.5, "rgba(10, 45, 105, 0.12)")
+		rightCoreGlow.addColorStop(1, "rgba(1, 7, 26, 0)")
+		ctx.fillStyle = rightCoreGlow
+		ctx.fillRect(0, 0, width, height)
+
+		const rightTopBlueGlow = ctx.createRadialGradient(
+			width * 0.95,
+			0,
+			10,
+			width * 0.88,
+			height * 0.18,
+			Math.max(width * 0.32, 240)
+		)
+		rightTopBlueGlow.addColorStop(0, "rgba(12, 50, 110, 0.25)")
+		rightTopBlueGlow.addColorStop(0.6, "rgba(4, 22, 60, 0.08)")
+		rightTopBlueGlow.addColorStop(1, "rgba(1, 7, 26, 0)")
+		ctx.fillStyle = rightTopBlueGlow
+		ctx.fillRect(0, 0, width, height)
+
+		bgCanvasRef.current = offscreen
+	}, [])
 
 	const initScene = useCallback((width: number, height: number) => {
 		const particles: NodeParticle[] = []
@@ -228,29 +345,26 @@ export default function NeuralBackground() {
 		let mouseRadius: number
 
 		if (isCompactBar) {
-			count = isMobile ? 12 : isTablet ? 22 : 32
-			specksCount = isMobile ? 8 : 16
+			count = isMobile ? 10 : isTablet ? 20 : 28
+			specksCount = isMobile ? 6 : 12
 			mouseRadius = 120
 		} else if (isMobile) {
-			// Telas pequenas (mobile full): 14 a 18 nós super fluidos e leves
-			count = Math.min(18, Math.max(14, Math.round(width / 24)))
-			specksCount = 8
-			mouseRadius = 120
+			// Telas pequenas (mobile full): 10 nós ultra leves
+			count = 10
+			specksCount = 6
+			mouseRadius = 100
 		} else if (isTablet) {
-			// Tablets: 35 a 48 nós
-			count = Math.min(48, Math.max(35, Math.round(width / 18)))
-			specksCount = 20
-			mouseRadius = 170
+			count = Math.min(36, Math.max(26, Math.round(width / 22)))
+			specksCount = 16
+			mouseRadius = 160
 		} else if (isDesktop) {
-			// Desktops / Laptops: 60 a 80 nós
-			count = Math.min(80, Math.max(60, Math.round(width / 16)))
-			specksCount = 35
-			mouseRadius = 210
+			count = Math.min(65, Math.max(48, Math.round(width / 18)))
+			specksCount = 28
+			mouseRadius = 200
 		} else {
-			// Telas grandes / Ultrawide: 85 a 110 nós
-			count = Math.min(110, Math.max(85, Math.round(width / 15)))
-			specksCount = 45
-			mouseRadius = 230
+			count = Math.min(85, Math.max(65, Math.round(width / 16)))
+			specksCount = 35
+			mouseRadius = 220
 		}
 
 		mouseRef.current.radius = mouseRadius
@@ -260,7 +374,6 @@ export default function NeuralBackground() {
 			const rand = Math.random()
 
 			if (isMobile) {
-				// No mobile, distribui 50% na esquerda e 50% na direita, deixando o centro 100% limpo
 				side = rand > 0.5 ? "right" : "left"
 			} else {
 				if (rand > 0.53) side = "right"
@@ -276,7 +389,8 @@ export default function NeuralBackground() {
 
 		particlesRef.current = particles
 		dataSpecksRef.current = dataSpecks
-	}, [])
+		renderStaticBackdrop(width, height)
+	}, [renderStaticBackdrop])
 
 	const handleResize = useCallback(() => {
 		const canvas = canvasRef.current
@@ -404,116 +518,13 @@ export default function NeuralBackground() {
 			ctx.scale(dpr, dpr)
 			ctx.clearRect(0, 0, width, height)
 
-			// -------------------------------------------------------------
-			// 1. FUNDO ATMOSFÉRICO & ILUMINAÇÃO DE BAIXO PARA CIMA
-			// -------------------------------------------------------------
-			const baseGrad = ctx.createLinearGradient(0, 0, width, height)
-			baseGrad.addColorStop(0, "#01071a")
-			baseGrad.addColorStop(0.5, "#011226")
-			baseGrad.addColorStop(1, "#021a36")
-			ctx.fillStyle = baseGrad
-			ctx.fillRect(0, 0, width, height)
-
-			const bottomUpAmbient = ctx.createLinearGradient(0, height, 0, height * 0.22)
-			bottomUpAmbient.addColorStop(0, "rgba(6, 50, 75, 0.28)")
-			bottomUpAmbient.addColorStop(0.5, "rgba(2, 25, 45, 0.1)")
-			bottomUpAmbient.addColorStop(1, "rgba(1, 7, 26, 0)")
-			ctx.fillStyle = bottomUpAmbient
-			ctx.fillRect(0, 0, width, height)
-
-			// -------------------------------------------------------------
-			// ESQUERDA: Luz Verde/Teal na base
-			// -------------------------------------------------------------
-			const leftTealBeam = ctx.createRadialGradient(
-				width * 0.08,
-				height * 1.05,
-				30,
-				width * 0.15,
-				height * 0.7,
-				Math.max(width * 0.48, 380)
-			)
-			leftTealBeam.addColorStop(0, "rgba(18, 140, 160, 0.45)")
-			leftTealBeam.addColorStop(0.3, "rgba(12, 100, 120, 0.28)")
-			leftTealBeam.addColorStop(0.6, "rgba(6, 60, 80, 0.12)")
-			leftTealBeam.addColorStop(0.85, "rgba(2, 25, 45, 0.04)")
-			leftTealBeam.addColorStop(1, "rgba(1, 7, 26, 0)")
-			ctx.fillStyle = leftTealBeam
-			ctx.fillRect(0, 0, width, height)
-
-			const leftCoreGlow = ctx.createRadialGradient(
-				0,
-				height,
-				0,
-				width * 0.05,
-				height * 0.85,
-				Math.max(width * 0.26, 240)
-			)
-			leftCoreGlow.addColorStop(0, "rgba(35, 180, 165, 0.38)")
-			leftCoreGlow.addColorStop(0.4, "rgba(16, 115, 130, 0.18)")
-			leftCoreGlow.addColorStop(0.75, "rgba(8, 65, 80, 0.06)")
-			leftCoreGlow.addColorStop(1, "rgba(1, 7, 26, 0)")
-			ctx.fillStyle = leftCoreGlow
-			ctx.fillRect(0, 0, width, height)
-
-			const leftTopBlueGlow = ctx.createRadialGradient(
-				width * 0.08,
-				0,
-				10,
-				width * 0.14,
-				height * 0.2,
-				Math.max(width * 0.35, 260)
-			)
-			leftTopBlueGlow.addColorStop(0, "rgba(12, 50, 110, 0.25)")
-			leftTopBlueGlow.addColorStop(0.6, "rgba(4, 22, 60, 0.08)")
-			leftTopBlueGlow.addColorStop(1, "rgba(1, 7, 26, 0)")
-			ctx.fillStyle = leftTopBlueGlow
-			ctx.fillRect(0, 0, width, height)
-
-			// -------------------------------------------------------------
-			// DIREITA: Luz Azul
-			// -------------------------------------------------------------
-			const rightBlueBeam = ctx.createRadialGradient(
-				width * 0.92,
-				height * 0.92,
-				20,
-				width * 0.86,
-				height * 0.65,
-				Math.max(width * 0.45, 360)
-			)
-			rightBlueBeam.addColorStop(0, "rgba(14, 60, 130, 0.38)")
-			rightBlueBeam.addColorStop(0.4, "rgba(8, 38, 90, 0.2)")
-			rightBlueBeam.addColorStop(0.75, "rgba(3, 18, 55, 0.08)")
-			rightBlueBeam.addColorStop(1, "rgba(1, 7, 26, 0)")
-			ctx.fillStyle = rightBlueBeam
-			ctx.fillRect(0, 0, width, height)
-
-			const rightCoreGlow = ctx.createRadialGradient(
-				width,
-				height,
-				0,
-				width * 0.95,
-				height * 0.85,
-				Math.max(width * 0.25, 220)
-			)
-			rightCoreGlow.addColorStop(0, "rgba(20, 80, 160, 0.32)")
-			rightCoreGlow.addColorStop(0.5, "rgba(10, 45, 105, 0.12)")
-			rightCoreGlow.addColorStop(1, "rgba(1, 7, 26, 0)")
-			ctx.fillStyle = rightCoreGlow
-			ctx.fillRect(0, 0, width, height)
-
-			const rightTopBlueGlow = ctx.createRadialGradient(
-				width * 0.95,
-				0,
-				10,
-				width * 0.88,
-				height * 0.18,
-				Math.max(width * 0.32, 240)
-			)
-			rightTopBlueGlow.addColorStop(0, "rgba(12, 50, 110, 0.25)")
-			rightTopBlueGlow.addColorStop(0.6, "rgba(4, 22, 60, 0.08)")
-			rightTopBlueGlow.addColorStop(1, "rgba(1, 7, 26, 0)")
-			ctx.fillStyle = rightTopBlueGlow
-			ctx.fillRect(0, 0, width, height)
+			// 1. Desenha o fundo atmosférico pré-renderizado instantaneamente
+			if (bgCanvasRef.current) {
+				ctx.drawImage(bgCanvasRef.current, 0, 0, width, height)
+			} else {
+				ctx.fillStyle = "#01071a"
+				ctx.fillRect(0, 0, width, height)
+			}
 
 			// -------------------------------------------------------------
 			// 2. DATA SPECKS
