@@ -52,8 +52,15 @@ export default function Projetos(props: ProjetosProps) {
 
 				{/* Lista do Carrossel - Somente Fotos dos Projetos */}
 				<CarouselContent className="-ml-4 py-2">
-					{props.lista.map((projeto, index) => {
+					{props.lista.map((projeto) => {
 						const imagemCapa = projeto.imagem?.[0]
+						const linkExterno = (projeto.site && projeto.site.trim().length > 0)
+							? projeto.site
+							: ((projeto.repositorio && projeto.repositorio.trim().length > 0)
+								? projeto.repositorio
+								: null)
+						const linkDestino = linkExterno || "/projeto"
+						const isExterno = Boolean(linkExterno)
 
 						return (
 							<CarouselItem
@@ -61,9 +68,9 @@ export default function Projetos(props: ProjetosProps) {
 								className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/3"
 							>
 								<Link
-									href={projeto.repositorio || "/projeto"}
-									target="_blank"
-									rel="noopener noreferrer"
+									href={linkDestino}
+									target={isExterno ? "_blank" : undefined}
+									rel={isExterno ? "noopener noreferrer" : undefined}
 									aria-label={`Ver projeto ${projeto.nome}`}
 									className="group relative block w-full aspect-video rounded-2xl overflow-hidden border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-xl shadow-lg transition-all duration-300 hover:border-zinc-600/90 hover:-translate-y-1.5 hover:shadow-[0_16px_36px_-12px_rgba(0,0,0,0.8),0_0_24px_rgba(59,130,246,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
 								>

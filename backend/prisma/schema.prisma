@@ -34,7 +34,8 @@ model Projeto {
   nivel       Int
   tipo        String
   destaque    Boolean      @default(false)
-  repositorio String
+  repositorio String?
+  site        String?
   tecnologias Tecnologia[]
 
   @@map("projetos")

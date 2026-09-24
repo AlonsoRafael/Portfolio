@@ -42,3 +42,4 @@ id,nome,destaque,descricao,imagem
 41,Jetpack Compose,false,Toolkit moderno do Android para construir interfaces de usuário nativas de forma declarativa.,https://github.com/AlonsoRafael/assets/raw/main/imagem/jetpack_compose.svg
 42,ZegoCloud,false,Plataforma de infraestrutura de nuvem para comunicação em tempo real.,https://github.com/AlonsoRafael/assets/raw/main/imagem/zegocloud.svg
 43,PySide6,false,Módulo oficial do Python que provê acesso ao framework Qt para criação de interfaces gráficas (GUI).,https://github.com/AlonsoRafael/assets/raw/main/imagem/pyside6.svg
+44,Spring Boot,true,Framework Java para criação de microsserviços e aplicações web modernas.,https://github.com/AlonsoRafael/assets/raw/main/imagem/spring_boot.svg

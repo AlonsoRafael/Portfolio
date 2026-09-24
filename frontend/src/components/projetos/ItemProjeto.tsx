@@ -1,7 +1,7 @@
 import { Projeto } from "@core"
 import Link from "next/link"
 import Image from "next/image"
-import { IconBrandGithub, IconExternalLink } from "@tabler/icons-react"
+import { IconBrandGithub, IconExternalLink, IconWorld } from "@tabler/icons-react"
 
 export interface ItemProjetoProps {
 	projeto: Projeto
@@ -52,34 +52,59 @@ export default function ItemProjeto({ projeto, className = "", priority = false 
 	const tipoEstilo = getTipoBadgeStyle(projeto.tipo)
 	const tecnologias = projeto.tecnologias ?? []
 	const imagemCapa = projeto.imagem?.[0]
+	const temSite = Boolean(projeto.site && projeto.site.trim().length > 0)
+	const temRepositorio = Boolean(projeto.repositorio && projeto.repositorio.trim().length > 0)
+	const linkPrincipal = temSite ? projeto.site : (temRepositorio ? projeto.repositorio : undefined)
 
 	return (
-		<Link
-			href={projeto.repositorio}
-			target="_blank"
-			rel="noopener noreferrer"
-			aria-label={`Ver repositório do projeto ${projeto.nome} no GitHub`}
-			className={`group relative flex flex-col h-full min-h-[500px] rounded-2xl border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-xl overflow-hidden transition-all duration-300 hover:border-zinc-600/90 hover:bg-zinc-900/80 hover:-translate-y-1.5 hover:shadow-[0_16px_36px_-12px_rgba(0,0,0,0.8),0_0_24px_rgba(59,130,246,0.12)] outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${className}`}
+		<div
+			className={`group relative flex flex-col h-full min-h-[500px] rounded-2xl border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-xl overflow-hidden transition-all duration-300 hover:border-zinc-600/90 hover:bg-zinc-900/80 hover:-translate-y-1.5 hover:shadow-[0_16px_36px_-12px_rgba(0,0,0,0.8),0_0_24px_rgba(59,130,246,0.12)] ${className}`}
 		>
 			{/* Efeito de iluminação radial no hover */}
 			<div className="absolute inset-0 bg-gradient-to-b from-blue-500/8 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
 			{/* Imagem de Capa do Projeto 100% limpa */}
 			<div className="relative w-full aspect-video shrink-0 overflow-hidden bg-zinc-900/90 border-b border-zinc-800/60">
-				{imagemCapa ? (
-					<Image
-						src={imagemCapa}
-						alt={`Demonstração do projeto ${projeto.nome}`}
-						fill
-						sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
-						quality={75}
-						priority={priority}
-						className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
-					/>
+				{linkPrincipal ? (
+					<Link
+						href={linkPrincipal}
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label={`Ver ${projeto.nome}`}
+						className="block w-full h-full"
+					>
+						{imagemCapa ? (
+							<Image
+								src={imagemCapa}
+								alt={`Demonstração do projeto ${projeto.nome}`}
+								fill
+								sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
+								quality={75}
+								priority={priority}
+								className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+							/>
+						) : (
+							<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-900 to-zinc-950 text-zinc-600 font-mono text-xs">
+								Sem imagem disponível
+							</div>
+						)}
+					</Link>
 				) : (
-					<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-900 to-zinc-950 text-zinc-600 font-mono text-xs">
-						Sem imagem disponível
-					</div>
+					imagemCapa ? (
+						<Image
+							src={imagemCapa}
+							alt={`Demonstração do projeto ${projeto.nome}`}
+							fill
+							sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
+							quality={75}
+							priority={priority}
+							className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+						/>
+					) : (
+						<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-900 to-zinc-950 text-zinc-600 font-mono text-xs">
+							Sem imagem disponível
+						</div>
+					)
 				)}
 			</div>
 
@@ -99,7 +124,18 @@ export default function ItemProjeto({ projeto, className = "", priority = false 
 
 					{/* Título */}
 					<h3 className="text-lg font-bold tracking-tight text-white group-hover:text-blue-400 transition-colors line-clamp-1 min-h-[1.75rem] flex items-center">
-						{projeto.nome}
+						{linkPrincipal ? (
+							<Link
+								href={linkPrincipal}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="hover:underline"
+							>
+								{projeto.nome}
+							</Link>
+						) : (
+							projeto.nome
+						)}
 					</h3>
 
 					{/* Descrição Completa (sem corte de texto) */}
@@ -140,20 +176,44 @@ export default function ItemProjeto({ projeto, className = "", priority = false 
 						)}
 					</div>
 
-					{/* Rodapé / Link GitHub */}
-					<div className="pt-3 border-t border-zinc-800/70 flex items-center justify-between">
+					{/* Rodapé / Links Ação */}
+					<div className="pt-3 border-t border-zinc-800/70 flex flex-wrap items-center justify-between gap-2">
 						<span className="text-xs font-mono text-zinc-500 group-hover:text-zinc-400 transition-colors">
 							{tecnologias.length} {tecnologias.length === 1 ? "tecnologia" : "tecnologias"}
 						</span>
 
-						<div className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-300 group-hover:text-white transition-colors bg-zinc-900/80 group-hover:bg-zinc-800 border border-zinc-800 group-hover:border-zinc-600 px-2.5 py-1 rounded-lg">
-							<IconBrandGithub size={14} className="text-zinc-400 group-hover:text-white transition-colors" />
-							<span>Repositório</span>
-							<IconExternalLink size={12} className="text-zinc-500 group-hover:text-zinc-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+						<div className="flex items-center gap-2">
+							{temSite && (
+								<Link
+									href={projeto.site!}
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label={`Acessar site do projeto ${projeto.nome}`}
+									className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-300 hover:text-white transition-colors bg-blue-500/10 hover:bg-blue-600/30 border border-blue-500/30 hover:border-blue-400/50 px-2.5 py-1 rounded-lg shadow-sm"
+								>
+									<IconWorld size={14} className="text-blue-400" />
+									<span>Site</span>
+									<IconExternalLink size={12} className="text-blue-400/70" />
+								</Link>
+							)}
+
+							{temRepositorio && (
+								<Link
+									href={projeto.repositorio!}
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label={`Ver repositório do projeto ${projeto.nome} no GitHub`}
+									className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-300 hover:text-white transition-colors bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-600 px-2.5 py-1 rounded-lg shadow-sm"
+								>
+									<IconBrandGithub size={14} className="text-zinc-400" />
+									<span>Repositório</span>
+									<IconExternalLink size={12} className="text-zinc-500 hover:text-zinc-300" />
+								</Link>
+							)}
 						</div>
 					</div>
 				</div>
 			</div>
-		</Link>
+		</div>
 	)
 }

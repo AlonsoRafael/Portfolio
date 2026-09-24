@@ -9,7 +9,8 @@ export default interface Projeto {
     imagem: string[];
     tipo: Tipo;
     nivel: Nivel;
-    repositorio: string;
+    repositorio?: string;
+    site?: string;
     destaque: boolean;
     tecnologias: Tecnologia[];
 }
