@@ -22,7 +22,7 @@ class NodeParticle {
 		const isMobile = width < 640
 		const isTablet = width >= 640 && width < 1024
 		const isCompactBar = height < 120
-		const spread = isCompactBar ? 0.42 : isMobile ? 0.25 : isTablet ? 0.32 : 0.36
+		const spread = isCompactBar ? 0.45 : isMobile ? 0.45 : isTablet ? 0.38 : 0.38
 
 		if (this.clusterSide === "left") {
 			this.x = Math.random() * (width * spread)
@@ -31,25 +31,25 @@ class NodeParticle {
 			this.x = width - Math.random() * (width * spread)
 			this.y = Math.random() * height
 		} else {
-			// Centro: nós centrais distribuídos
-			this.x = isCompactBar
-				? Math.random() * width
-				: width * 0.36 + Math.random() * (width * 0.28)
+			// Centro: nós centrais distribuídos por toda a extensão central
+			this.x = isCompactBar || isMobile
+				? width * 0.15 + Math.random() * (width * 0.7)
+				: width * 0.30 + Math.random() * (width * 0.4)
 			this.y = Math.random() * height
 		}
 
-		const speedMultiplier = isCompactBar ? 0.22 : isMobile ? 0.22 : 0.32
+		const speedMultiplier = isCompactBar ? 0.22 : isMobile ? 0.28 : 0.32
 		this.vx = (Math.random() - 0.5) * speedMultiplier
 		this.vy = (Math.random() - 0.5) * speedMultiplier
 
-		// Raio adaptativo proporcional
+		// Raio adaptativo proporcional e visível
 		const baseRadius = isCompactBar
-			? 0.9 + Math.random() * 1.2
+			? 1.0 + Math.random() * 1.2
 			: isMobile
-			? 0.9 + Math.random() * 1.3
-			: 1.2 + Math.random() * 2.0
+			? 1.2 + Math.random() * 1.6
+			: 1.3 + Math.random() * 2.0
 		this.radius = baseRadius
-		this.baseAlpha = Math.random() * 0.55 + 0.35
+		this.baseAlpha = Math.random() * 0.5 + 0.4
 		this.pulseSpeed = Math.random() * 0.03 + 0.01
 		this.pulseAngle = Math.random() * Math.PI * 2
 	}
@@ -64,8 +64,8 @@ class NodeParticle {
 
 		const isMobile = width < 640
 		const isTablet = width >= 640 && width < 1024
-		const maxLeft = isMobile ? width * 0.28 : isTablet ? width * 0.36 : width * 0.42
-		const minRight = isMobile ? width * 0.72 : isTablet ? width * 0.64 : width * 0.58
+		const maxLeft = isMobile ? width * 0.48 : isTablet ? width * 0.42 : width * 0.44
+		const minRight = isMobile ? width * 0.52 : isTablet ? width * 0.58 : width * 0.56
 
 		if (this.clusterSide === "left") {
 			if (this.x < 8) {
@@ -81,6 +81,12 @@ class NodeParticle {
 				this.vx *= -1
 			}
 			if (this.x < minRight) {
+				this.vx *= -1
+			}
+		} else {
+			const centerMin = isMobile ? width * 0.1 : width * 0.25
+			const centerMax = isMobile ? width * 0.9 : width * 0.75
+			if (this.x < centerMin || this.x > centerMax) {
 				this.vx *= -1
 			}
 		}
@@ -345,25 +351,25 @@ export default function NeuralBackground() {
 		let mouseRadius: number
 
 		if (isCompactBar) {
-			count = isMobile ? 10 : isTablet ? 20 : 28
-			specksCount = isMobile ? 6 : 12
+			count = isMobile ? 16 : isTablet ? 24 : 32
+			specksCount = isMobile ? 10 : 16
 			mouseRadius = 120
 		} else if (isMobile) {
-			// Telas pequenas (mobile full): 10 nós ultra leves
-			count = 10
-			specksCount = 6
-			mouseRadius = 100
-		} else if (isTablet) {
-			count = Math.min(36, Math.max(26, Math.round(width / 22)))
+			// Telas pequenas (mobile): quantidade rica e fluida de nós (30 a 42 nós)
+			count = Math.min(42, Math.max(30, Math.round(height / 22)))
 			specksCount = 16
+			mouseRadius = 120
+		} else if (isTablet) {
+			count = Math.min(52, Math.max(36, Math.round(width / 20)))
+			specksCount = 22
 			mouseRadius = 160
 		} else if (isDesktop) {
-			count = Math.min(65, Math.max(48, Math.round(width / 18)))
-			specksCount = 28
+			count = Math.min(72, Math.max(50, Math.round(width / 18)))
+			specksCount = 30
 			mouseRadius = 200
 		} else {
-			count = Math.min(85, Math.max(65, Math.round(width / 16)))
-			specksCount = 35
+			count = Math.min(90, Math.max(68, Math.round(width / 16)))
+			specksCount = 38
 			mouseRadius = 220
 		}
 
@@ -374,10 +380,12 @@ export default function NeuralBackground() {
 			const rand = Math.random()
 
 			if (isMobile) {
-				side = rand > 0.5 ? "right" : "left"
+				if (rand > 0.62) side = "right"
+				else if (rand > 0.35) side = "left"
+				else side = "center"
 			} else {
 				if (rand > 0.53) side = "right"
-				else if (rand > 0.45) side = "center"
+				else if (rand > 0.42) side = "center"
 			}
 
 			particles.push(new NodeParticle(side, width, height))
@@ -418,6 +426,15 @@ export default function NeuralBackground() {
 		if (!parent) return
 
 		const handlePointerMove = (e: MouseEvent | PointerEvent) => {
+			if (typeof window !== "undefined") {
+				if (window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches) {
+					return
+				}
+				if ("pointerType" in e && e.pointerType === "touch") {
+					return
+				}
+			}
+
 			const rect = parent.getBoundingClientRect()
 			const inside =
 				e.clientX >= rect.left &&
@@ -442,41 +459,13 @@ export default function NeuralBackground() {
 			mouseRef.current.active = false
 		}
 
-		const handleTouchMove = (e: TouchEvent) => {
-			if (e.touches.length > 0) {
-				const rect = parent.getBoundingClientRect()
-				const touch = e.touches[0]
-				const inside =
-					touch.clientX >= rect.left &&
-					touch.clientX <= rect.right &&
-					touch.clientY >= rect.top &&
-					touch.clientY <= rect.bottom
-
-				if (inside) {
-					mouseRef.current.x = touch.clientX - rect.left
-					mouseRef.current.y = touch.clientY - rect.top
-					mouseRef.current.active = true
-				}
-			}
-		}
-
-		const handleTouchEnd = () => {
-			mouseRef.current.x = null
-			mouseRef.current.y = null
-			mouseRef.current.active = false
-		}
-
 		window.addEventListener("pointermove", handlePointerMove, { passive: true })
 		parent.addEventListener("pointerleave", handlePointerLeave)
-		window.addEventListener("touchmove", handleTouchMove, { passive: true })
-		window.addEventListener("touchend", handleTouchEnd)
 		window.addEventListener("scroll", handlePointerLeave, { passive: true })
 
 		return () => {
 			window.removeEventListener("pointermove", handlePointerMove)
 			parent.removeEventListener("pointerleave", handlePointerLeave)
-			window.removeEventListener("touchmove", handleTouchMove)
-			window.removeEventListener("touchend", handleTouchEnd)
 			window.removeEventListener("scroll", handlePointerLeave)
 		}
 	}, [])
@@ -546,8 +535,8 @@ export default function NeuralBackground() {
 			const isMobile = width < 640
 			const isTablet = width >= 640 && width < 1024
 			const isCompactBar = height < 120
-			const maxDist = isCompactBar ? Math.min(80, height * 1.25) : isMobile ? 75 : isTablet ? 105 : 135
-			const maxClusterCross = isMobile ? width * 0.14 : isTablet ? width * 0.18 : width * 0.22
+			const maxDist = isCompactBar ? Math.min(90, height * 1.3) : isMobile ? 100 : isTablet ? 115 : 135
+			const maxClusterCross = isMobile ? width * 0.45 : isTablet ? width * 0.25 : width * 0.25
 
 			for (let i = 0; i < pLen; i++) {
 				const p = particles[i]
@@ -561,7 +550,7 @@ export default function NeuralBackground() {
 						const dist = Math.hypot(p.x - p2.x, p.y - p2.y)
 
 						if (dist < maxDist) {
-							const alpha = (1 - dist / maxDist) * 0.38
+							const alpha = (1 - dist / maxDist) * 0.42
 
 							if (p.clusterSide === "left") {
 								const avgY = (p.y + p2.y) / 2
@@ -573,7 +562,7 @@ export default function NeuralBackground() {
 								ctx.strokeStyle = `rgba(56, 189, 248, ${alpha})`
 							}
 
-							ctx.lineWidth = isMobile ? 0.45 : 0.55
+							ctx.lineWidth = isMobile ? 0.6 : 0.55
 							ctx.beginPath()
 							ctx.moveTo(p.x, p.y)
 							ctx.lineTo(p2.x, p2.y)

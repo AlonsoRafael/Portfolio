@@ -161,6 +161,15 @@ export default function AsciiCursorBackground() {
 	// Rastreamento de ponteiro (mouse e toque)
 	useEffect(() => {
 		const handlePointerMove = (e: MouseEvent | PointerEvent) => {
+			if (typeof window !== "undefined") {
+				if (window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches) {
+					return
+				}
+				if ("pointerType" in e && e.pointerType === "touch") {
+					return
+				}
+			}
+
 			const currentX = e.clientX
 			const currentY = e.clientY
 
@@ -185,40 +194,12 @@ export default function AsciiCursorBackground() {
 			mouseRef.current.active = false
 		}
 
-		const handleTouchMove = (e: TouchEvent) => {
-			if (e.touches.length > 0) {
-				const touch = e.touches[0]
-				const currentX = touch.clientX
-				const currentY = touch.clientY
-
-				const prevX = mouseRef.current.prevX ?? currentX
-				const prevY = mouseRef.current.prevY ?? currentY
-
-				pushTrailPoints(prevX, prevY, currentX, currentY)
-
-				mouseRef.current.prevX = currentX
-				mouseRef.current.prevY = currentY
-				mouseRef.current.x = currentX
-				mouseRef.current.y = currentY
-				mouseRef.current.active = true
-				mouseRef.current.lastInteractionTime = Date.now()
-			}
-		}
-
-		const handleTouchEnd = () => {
-			handlePointerLeave()
-		}
-
 		window.addEventListener("pointermove", handlePointerMove, { passive: true })
 		window.addEventListener("pointerleave", handlePointerLeave)
-		window.addEventListener("touchmove", handleTouchMove, { passive: true })
-		window.addEventListener("touchend", handleTouchEnd)
 
 		return () => {
 			window.removeEventListener("pointermove", handlePointerMove)
 			window.removeEventListener("pointerleave", handlePointerLeave)
-			window.removeEventListener("touchmove", handleTouchMove)
-			window.removeEventListener("touchend", handleTouchEnd)
 		}
 	}, [pushTrailPoints])
 

@@ -168,7 +168,7 @@ export default function Principal(props: PrincipalProps) {
 			ref={containerRef}
 			onMouseMove={handleMouseMove}
 			onMouseLeave={handleMouseLeave}
-			className="relative overflow-hidden flex flex-col items-center justify-between min-h-[500px] h-[500px] w-full group cursor-default select-none bg-[#02112f]"
+			className="relative overflow-hidden flex flex-col items-center justify-between min-h-[540px] sm:min-h-[520px] md:h-[520px] w-full group cursor-default select-none bg-[#02112f]"
 		>
 			{/* Fundo Canvas 2D Interativo de Rede Neural */}
 			<NeuralBackground />
@@ -188,13 +188,13 @@ export default function Principal(props: PrincipalProps) {
 							opacity: 0,
 						}}
 					>
-						<div className="relative h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 flex items-center justify-center bg-transparent">
+						<div className="relative h-10 w-10 sm:h-11 sm:w-11 md:h-12 md:w-12 flex items-center justify-center bg-transparent">
 							<div className="relative w-full h-full">
 								<Image
 									src={tecnologia.imagem}
 									alt={tecnologia.nome}
 									fill
-									sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
+									sizes="(max-width: 640px) 40px, (max-width: 768px) 44px, 48px"
 									className="object-contain drop-shadow-md"
 								/>
 							</div>
@@ -212,11 +212,11 @@ export default function Principal(props: PrincipalProps) {
 						<Image
 							src="/foto_rafael.jpg"
 							alt="Foto de Rafael Alonso Marques"
-							width={176}
-							height={176}
-							sizes="(max-width: 640px) 112px, (max-width: 768px) 144px, 176px"
+							width={200}
+							height={200}
+							sizes="(max-width: 640px) 160px, (max-width: 768px) 176px, 192px"
 							quality={80}
-							className="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 aspect-square rounded-full object-cover object-center border-2 sm:border-3 border-white/85 shadow-xl shadow-black/50"
+							className="w-40 h-40 sm:w-44 sm:h-44 md:w-48 md:h-48 aspect-square rounded-full object-cover object-center border-2 sm:border-3 border-white/85 shadow-xl shadow-black/50"
 							priority
 							fetchPriority="high"
 						/>
@@ -259,7 +259,7 @@ export default function Principal(props: PrincipalProps) {
 										ref={(el) => {
 											itemRefs.current[idx] = el
 										}}
-										className="relative h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-2xl flex items-center justify-center"
+										className="relative h-10 w-10 sm:h-11 sm:w-11 md:h-12 md:w-12 rounded-2xl flex items-center justify-center"
 									>
 										{(!isDesktop || !isHovered) && (
 											<div className="relative w-full h-full">
@@ -267,7 +267,7 @@ export default function Principal(props: PrincipalProps) {
 													src={tecnologia.imagem}
 													alt={tecnologia.nome}
 													fill
-													sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
+													sizes="(max-width: 640px) 40px, (max-width: 768px) 44px, 48px"
 													className="object-contain drop-shadow-md"
 													priority={idx < 4}
 												/>

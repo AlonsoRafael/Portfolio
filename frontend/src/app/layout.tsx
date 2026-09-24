@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Montserrat } from "next/font/google"
 import "./globals.css"
 
@@ -8,8 +8,15 @@ const fonte = Montserrat({
 	variable: "--font-sans",
 })
 
+export const viewport: Viewport = {
+	width: "device-width",
+	initialScale: 1,
+	maximumScale: 5,
+	interactiveWidget: "resizes-content",
+}
+
 export const metadata: Metadata = {
-	title: "Rafael Alonso | Software Developer",
+	title: "Rafael Alonso | Portfólio",
 	description:
 		"Portfólio de Rafael Alonso, desenvolvedor Front-end e Back-end com foco em Java (Spring Boot), Python, Next.js, NestJS, React.js e TypeScript. Projetos reais, experiências e soluções web modernas.",
 	metadataBase: new URL("https://alonsotech.vercel.app"),
@@ -17,7 +24,7 @@ export const metadata: Metadata = {
 		canonical: "/",
 	},
 	openGraph: {
-		title: "Rafael Alonso | Software Developer",
+		title: "Rafael Alonso | Portfólio",
 		description:
 			"Portfólio de Rafael Alonso Marques. Desenvolvedor Full Stack especializado em React, Next.js, Java e Python.",
 		type: "website",

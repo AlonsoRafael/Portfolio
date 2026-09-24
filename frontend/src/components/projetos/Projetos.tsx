@@ -27,24 +27,21 @@ export default function Projetos(props: ProjetosProps) {
 				}}
 				className="w-full relative md:px-12"
 			>
-				{/* Header: Título, contador e link para página de projetos */}
-				<div className="flex items-center justify-between w-full mb-4 md:mb-6">
-					<div className="flex items-center gap-3">
+				{/* Header: Título, link clicável com contagem e controles */}
+				<div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 w-full mb-4 md:mb-6">
+					<div className="flex items-center gap-2.5 sm:gap-3.5">
 						<h2 className="text-2xl sm:text-3xl font-bold text-white/85 tracking-tight">{props.titulo}</h2>
-						<span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-zinc-800/80 text-zinc-400 border border-zinc-700/60 font-mono">
-							{props.lista.length}
-						</span>
+						<Link
+							href="/projeto"
+							title={`Ver todos os ${props.lista.length} projetos`}
+							className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-3 py-1 rounded-full bg-zinc-900/90 hover:bg-blue-950/60 text-zinc-300 hover:text-blue-300 border border-zinc-700/70 hover:border-blue-500/50 transition-all duration-200 shadow-sm group"
+						>
+							<span>Ver os {props.lista.length} projetos</span>
+							<IconArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+						</Link>
 					</div>
 
 					<div className="flex items-center gap-3">
-						<Link
-							href="/projeto"
-							className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-white transition-colors group"
-						>
-							<span>Ver todos</span>
-							<IconArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
-						</Link>
-
 						{/* Setas mobile */}
 						<div className="flex md:hidden items-center gap-1.5">
 							<CarouselPrevious className="static translate-x-0 translate-y-0 h-8 w-8 bg-zinc-900/90 border-zinc-700/80 hover:bg-zinc-800 text-white" />
