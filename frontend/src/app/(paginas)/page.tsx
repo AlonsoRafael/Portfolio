@@ -5,7 +5,7 @@ import Container from "@/components/shared/Container"
 import { obterProjetos } from "@/functions/projetos"
 import { obterTecnologias } from "@/functions/tecnologias"
 
-export const revalidate = 3600
+export const revalidate = 300
 
 export default async function Home() {
 	const tecnologias = await obterTecnologias()

@@ -6,7 +6,7 @@ import AsciiCursorBackground from "@/components/projetos/AsciiCursorBackground"
 import NeuralBackground from "@/components/landing/NeuralBackground"
 import ItemProjeto from "@/components/projetos/ItemProjeto"
 
-export const revalidate = 60
+export const revalidate = 300
 
 export const metadata: Metadata = {
 	title: "Projetos | Rafael Alonso - Software Developer",

@@ -68,31 +68,39 @@ class NodeParticle {
 		const minRight = isMobile ? width * 0.52 : isTablet ? width * 0.58 : width * 0.56
 
 		if (this.clusterSide === "left") {
-			if (this.x < 8) {
+			if (this.x <= 8) {
 				this.x = 8
-				this.vx *= -1
-			}
-			if (this.x > maxLeft) {
-				this.vx *= -1
+				this.vx = Math.abs(this.vx)
+			} else if (this.x >= maxLeft) {
+				this.x = maxLeft
+				this.vx = -Math.abs(this.vx)
 			}
 		} else if (this.clusterSide === "right") {
-			if (this.x > width - 8) {
+			if (this.x >= width - 8) {
 				this.x = width - 8
-				this.vx *= -1
-			}
-			if (this.x < minRight) {
-				this.vx *= -1
+				this.vx = -Math.abs(this.vx)
+			} else if (this.x <= minRight) {
+				this.x = minRight
+				this.vx = Math.abs(this.vx)
 			}
 		} else {
 			const centerMin = isMobile ? width * 0.1 : width * 0.25
 			const centerMax = isMobile ? width * 0.9 : width * 0.75
-			if (this.x < centerMin || this.x > centerMax) {
-				this.vx *= -1
+			if (this.x <= centerMin) {
+				this.x = centerMin
+				this.vx = Math.abs(this.vx)
+			} else if (this.x >= centerMax) {
+				this.x = centerMax
+				this.vx = -Math.abs(this.vx)
 			}
 		}
 
-		if (this.y < 8 || this.y > height - 8) {
-			this.vy *= -1
+		if (this.y <= 8) {
+			this.y = 8
+			this.vy = Math.abs(this.vy)
+		} else if (this.y >= height - 8) {
+			this.y = height - 8
+			this.vy = -Math.abs(this.vy)
 		}
 
 		if (mouse.x !== null && mouse.y !== null) {
@@ -400,15 +408,51 @@ export default function NeuralBackground() {
 		renderStaticBackdrop(width, height)
 	}, [renderStaticBackdrop])
 
+	const adaptParticles = useCallback(
+		(oldWidth: number, oldHeight: number, newWidth: number, newHeight: number) => {
+			if (oldWidth <= 0 || oldHeight <= 0) return
+			const scaleX = newWidth / oldWidth
+			const scaleY = newHeight / oldHeight
+
+			const particles = particlesRef.current
+			for (let i = 0; i < particles.length; i++) {
+				const p = particles[i]
+				p.x = Math.max(8, Math.min(newWidth - 8, p.x * scaleX))
+				p.y = Math.max(8, Math.min(newHeight - 8, p.y * scaleY))
+			}
+
+			const dataSpecks = dataSpecksRef.current
+			for (let i = 0; i < dataSpecks.length; i++) {
+				const s = dataSpecks[i]
+				s.x = Math.max(0, Math.min(newWidth, s.x * scaleX))
+				s.y = Math.max(0, Math.min(newHeight, s.y * scaleY))
+			}
+		},
+		[]
+	)
+
 	const handleResize = useCallback(() => {
 		const canvas = canvasRef.current
 		const container = containerRef.current
 		if (!canvas || !container) return
 
 		const rect = container.getBoundingClientRect()
-		const width = rect.width
-		const height = rect.height
+		const width = Math.round(rect.width)
+		const height = Math.round(rect.height)
 		const dpr = Math.min(window.devicePixelRatio || 1, 2)
+
+		if (width === 0 || height === 0) return
+
+		const prev = dimensionsRef.current
+		const isInitial = prev.width === 0 || prev.height === 0 || particlesRef.current.length === 0
+
+		const widthDiff = Math.abs(width - prev.width)
+		const heightDiff = Math.abs(height - prev.height)
+
+		// Se as dimensões forem idênticas, nada precisa ser feito
+		if (!isInitial && widthDiff === 0 && heightDiff === 0 && prev.dpr === dpr) {
+			return
+		}
 
 		canvas.width = Math.floor(width * dpr)
 		canvas.height = Math.floor(height * dpr)
@@ -416,8 +460,18 @@ export default function NeuralBackground() {
 		canvas.style.height = `${height}px`
 
 		dimensionsRef.current = { width, height, dpr }
-		initScene(width, height)
-	}, [initScene])
+
+		if (isInitial || widthDiff > 80) {
+			// Carga inicial ou rotação de tela (portrait <-> landscape)
+			initScene(width, height)
+		} else {
+			// Redimensionamento sutil (ex: barra de endereço do navegador mobile ao rolar a página)
+			adaptParticles(prev.width, prev.height, width, height)
+			if (widthDiff > 20 || heightDiff > 50) {
+				renderStaticBackdrop(width, height)
+			}
+		}
+	}, [initScene, adaptParticles, renderStaticBackdrop])
 
 	// Event listeners para rastrear o mouse/toque em toda a seção
 	useEffect(() => {
@@ -427,10 +481,14 @@ export default function NeuralBackground() {
 
 		const handlePointerMove = (e: MouseEvent | PointerEvent) => {
 			if (typeof window !== "undefined") {
-				if (window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches) {
-					return
-				}
-				if ("pointerType" in e && e.pointerType === "touch") {
+				if (
+					window.innerWidth < 768 ||
+					window.matchMedia("(hover: none) and (pointer: coarse)").matches ||
+					("pointerType" in e && e.pointerType === "touch")
+				) {
+					mouseRef.current.x = null
+					mouseRef.current.y = null
+					mouseRef.current.active = false
 					return
 				}
 			}
@@ -462,11 +520,15 @@ export default function NeuralBackground() {
 		window.addEventListener("pointermove", handlePointerMove, { passive: true })
 		parent.addEventListener("pointerleave", handlePointerLeave)
 		window.addEventListener("scroll", handlePointerLeave, { passive: true })
+		window.addEventListener("touchstart", handlePointerLeave, { passive: true })
+		window.addEventListener("touchmove", handlePointerLeave, { passive: true })
 
 		return () => {
 			window.removeEventListener("pointermove", handlePointerMove)
 			parent.removeEventListener("pointerleave", handlePointerLeave)
 			window.removeEventListener("scroll", handlePointerLeave)
+			window.removeEventListener("touchstart", handlePointerLeave)
+			window.removeEventListener("touchmove", handlePointerLeave)
 		}
 	}, [])
 

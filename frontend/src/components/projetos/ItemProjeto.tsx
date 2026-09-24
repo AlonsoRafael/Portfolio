@@ -71,7 +71,7 @@ export default function ItemProjeto({ projeto, className = "", priority = false 
 						target="_blank"
 						rel="noopener noreferrer"
 						aria-label={`Ver ${projeto.nome}`}
-						className="block w-full h-full"
+						className="relative block w-full h-full"
 					>
 						{imagemCapa ? (
 							<Image

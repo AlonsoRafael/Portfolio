@@ -126,6 +126,15 @@ export default function AsciiCursorBackground() {
 		const height = window.innerHeight
 		const dpr = Math.min(window.devicePixelRatio || 1, 2)
 
+		const prev = dimensionsRef.current
+		const isInitial = prev.width === 0 || prev.height === 0 || gridRef.current.length === 0
+		const widthDiff = Math.abs(width - prev.width)
+		const heightDiff = Math.abs(height - prev.height)
+
+		if (!isInitial && widthDiff === 0 && heightDiff === 0 && prev.dpr === dpr) {
+			return
+		}
+
 		canvas.width = Math.floor(width * dpr)
 		canvas.height = Math.floor(height * dpr)
 		canvas.style.width = `${width}px`
@@ -135,7 +144,9 @@ export default function AsciiCursorBackground() {
 		dimensionsRef.current.height = height
 		dimensionsRef.current.dpr = dpr
 
-		initGrid(width, height)
+		if (isInitial || widthDiff > 60 || heightDiff > 120) {
+			initGrid(width, height)
+		}
 	}, [initGrid])
 
 	// Adiciona segmento de trajetória ao histórico de rastro
