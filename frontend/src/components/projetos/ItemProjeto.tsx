@@ -189,11 +189,11 @@ export default function ItemProjeto({ projeto, className = "", priority = false 
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label={`Acessar site do projeto ${projeto.nome}`}
-									className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-300 hover:text-white transition-colors bg-blue-500/10 hover:bg-blue-600/30 border border-blue-500/30 hover:border-blue-400/50 px-2.5 py-1 rounded-lg shadow-sm"
+									className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-300 hover:text-white transition-colors bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-600 px-2.5 py-1 rounded-lg shadow-sm"
 								>
-									<IconWorld size={14} className="text-blue-400" />
+									<IconWorld size={14} className="text-zinc-400" />
 									<span>Site</span>
-									<IconExternalLink size={12} className="text-blue-400/70" />
+									<IconExternalLink size={12} className="text-zinc-500 hover:text-zinc-300" />
 								</Link>
 							)}
 
