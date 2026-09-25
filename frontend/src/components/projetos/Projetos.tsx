@@ -79,9 +79,9 @@ export default function Projetos(props: ProjetosProps) {
 											src={imagemCapa}
 											alt={`Demonstração do projeto ${projeto.nome}`}
 											fill
-											sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-											quality={80}
-											className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+											sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, 25vw"
+											quality={90}
+											className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
 										/>
 									) : (
 										<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-900 to-zinc-950 text-zinc-600 font-mono text-xs">

@@ -63,7 +63,7 @@ export default function ItemProjeto({ projeto, className = "", priority = false 
 			{/* Efeito de iluminação radial no hover */}
 			<div className="absolute inset-0 bg-gradient-to-b from-blue-500/8 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-			{/* Imagem de Capa do Projeto 100% limpa */}
+			{/* Imagem de Capa do Projeto 100% limpa em proporção 16:9 */}
 			<div className="relative w-full aspect-video shrink-0 overflow-hidden bg-zinc-900/90 border-b border-zinc-800/60">
 				{linkPrincipal ? (
 					<Link
@@ -78,10 +78,10 @@ export default function ItemProjeto({ projeto, className = "", priority = false 
 								src={imagemCapa}
 								alt={`Demonstração do projeto ${projeto.nome}`}
 								fill
-								sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
+								sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, (max-width: 1536px) 31vw, 380px"
 								quality={75}
 								priority={priority}
-								className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+								className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
 							/>
 						) : (
 							<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-900 to-zinc-950 text-zinc-600 font-mono text-xs">
@@ -95,10 +95,10 @@ export default function ItemProjeto({ projeto, className = "", priority = false 
 							src={imagemCapa}
 							alt={`Demonstração do projeto ${projeto.nome}`}
 							fill
-							sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
+							sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, (max-width: 1536px) 31vw, 380px"
 							quality={75}
 							priority={priority}
-							className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+							className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
 						/>
 					) : (
 						<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-900 to-zinc-950 text-zinc-600 font-mono text-xs">

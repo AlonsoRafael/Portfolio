@@ -36,5 +36,13 @@
     "eslint-config-next": "16.2.0",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "browserslist": [
+    "defaults and fully supports es6-module",
+    "Chrome >= 90",
+    "Firefox >= 90",
+    "Safari >= 15.4",
+    "Edge >= 90",
+    "iOS >= 15.4"
+  ]
 }

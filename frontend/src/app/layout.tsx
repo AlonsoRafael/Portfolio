@@ -87,6 +87,8 @@ export default function RootLayout({
 	return (
 		<html lang="pt-BR" className={fonte.variable}>
 			<head>
+				<link rel="preconnect" href="https://raw.githubusercontent.com" crossOrigin="anonymous" />
+				<link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
 				<script
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
