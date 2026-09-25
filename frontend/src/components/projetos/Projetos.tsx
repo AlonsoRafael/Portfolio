@@ -79,7 +79,7 @@ export default function Projetos(props: ProjetosProps) {
 											src={imagemCapa}
 											alt={`Demonstração do projeto ${projeto.nome}`}
 											fill
-											sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, (max-width: 1536px) 31vw, 380px"
+											sizes="(max-width: 640px) 380px, (max-width: 1024px) 45vw, 360px"
 											quality={75}
 											className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
 										/>
