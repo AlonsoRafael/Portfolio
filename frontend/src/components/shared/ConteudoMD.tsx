@@ -1,5 +1,6 @@
 import Markdown from "react-markdown"
 import rehypeRaw from "rehype-raw"
+import rehypeSanitize from "rehype-sanitize"
 import remarkGfm from "remark-gfm"
 
 export interface ConteudoMDProps {
@@ -10,8 +11,7 @@ export default function ConteudoMD(props: ConteudoMDProps) {
 	return (
 		<Markdown
 			remarkPlugins={[remarkGfm]}
-			rehypePlugins={[rehypeRaw]}
-			skipHtml={false}
+			rehypePlugins={[rehypeRaw, rehypeSanitize]}
 			components={{
 				a: ({ href, children, ...rest }) => (
 					<a

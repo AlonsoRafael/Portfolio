@@ -1,21 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
-import { Projeto } from '@core';
-import { ProjetoPrisma } from './projeto.prisma';
-import { Param } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from "@nestjs/common"
+import { Projeto } from "@core"
+import { ProjetoPrisma } from "./projeto.prisma"
 
-@Controller('projetos')
+@Controller("projetos")
 export class ProjetoController {
+	constructor(private readonly repo: ProjetoPrisma) {}
 
-    constructor(private readonly repo: ProjetoPrisma) {}
+	@Get()
+	async obterTodos(): Promise<Projeto[]> {
+		return this.repo.obterTodos()
+	}
 
-    @Get()
-    async obterTodos(): Promise<Projeto[]> {
-        return this.repo.obterTodos();
-    }
-    
-    @Get(':id')
-    async obterPorId(@Param('id') id: string): Promise<Projeto | null> {
-        return this.repo.obterPorId(Number(id));
-    }
-
+	@Get(":id")
+	async obterPorId(@Param("id", ParseIntPipe) id: number): Promise<Projeto | null> {
+		return this.repo.obterPorId(id)
+	}
 }
