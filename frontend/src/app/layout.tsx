@@ -6,6 +6,9 @@ const fonte = Montserrat({
 	subsets: ["latin"],
 	display: "swap",
 	variable: "--font-sans",
+	preload: true,
+	fallback: ["system-ui", "-apple-system", "sans-serif"],
+	adjustFontFallback: true,
 })
 
 export const viewport: Viewport = {
@@ -87,8 +90,6 @@ export default function RootLayout({
 	return (
 		<html lang="pt-BR" className={fonte.variable}>
 			<head>
-				<link rel="preconnect" href="https://raw.githubusercontent.com" crossOrigin="anonymous" />
-				<link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
 				<script
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
